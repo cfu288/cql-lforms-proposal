@@ -1,0 +1,16 @@
+{
+  "name": "cql-lforms-proposal",
+  "version": "1.0.0",
+  "description": "Queries are currenlty used int he folloowing locations:",
+  "main": "index.js",
+  "scripts": {
+    "stringify": "tsx stringify.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.20.2",
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.3"
+  }
+}
