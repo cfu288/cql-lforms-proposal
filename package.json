@@ -12,5 +12,8 @@
     "esbuild": "^0.20.2",
     "tsx": "^4.7.1",
     "typescript": "^5.4.3"
+  },
+  "dependencies": {
+    "cql-execution": "^3.0.1"
   }
 }
