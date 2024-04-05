@@ -74,12 +74,18 @@ function App() {
             </button>
           </div>
         </form>
-        <h2>ELM output (depends on cql-to-elm translation hosted service)</h2>
+        <h2>
+          ELM output (depends on{" "}
+          <a href="https://github.com/cqframework/cql-translation-service">
+            cql-to-elm translation service
+          </a>
+          )
+        </h2>
         <pre
           style={{
             textAlign: "left",
             maxWidth: "100%",
-            maxHeight: "500px",
+            maxHeight: "350px",
             overflowX: "auto",
             overflowY: "auto",
             border: "1px solid #ccc",
@@ -87,7 +93,13 @@ function App() {
         >
           {JSON.stringify(elm, null, 2)}
         </pre>
-        <h2>CQL output (using cql-executor library)</h2>
+        <h2>
+          CQL output (using{" "}
+          <a href="https://github.com/cqframework/cql-execution?tab=readme-ov-file">
+            cql-execution
+          </a>{" "}
+          library)
+        </h2>
         <pre
           style={{
             maxWidth: "100%",
