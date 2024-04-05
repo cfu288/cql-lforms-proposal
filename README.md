@@ -32,7 +32,7 @@ See demo under `web-demo` directory. Requires [cql-translation-service](https://
 }
 ```
 
-## **External CQL Library Example**
+## **External CQL Example**
 
 ```json
 {
@@ -69,6 +69,8 @@ See demo under `web-demo` directory. Requires [cql-translation-service](https://
 ```
 
 ## Run the demo
+
+![demo video](https://github.com/cfu288/cql-lforms-proposal/assets/2985976/ac32716f-c673-480e-93da-c0821586c8a9)
 
 Note: Requires running cql-translation-service at localhost:8080
 
