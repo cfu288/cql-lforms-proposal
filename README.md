@@ -81,7 +81,9 @@ npm run dev
 
 Requires [cql-translation-service](https://github.com/cqframework/cql-translation-service) to be running to translate CQL into executable ELM.
 
-Note after cloning the repo, you will need to update the dockerfile to below:
+Note after cloning the [cql-translation-service](https://github.com/cqframework/cql-translation-service) repo, you will need to make a few changes to make it compatible with this demo:
+
+Update the dockerfile to below:
 
 ```Dockerfile
 # fetch basic image
