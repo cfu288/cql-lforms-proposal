@@ -4,7 +4,7 @@
   "description": "Queries are currenlty used int he folloowing locations:",
   "main": "index.js",
   "scripts": {
-    "stringify": "tsx stringify.ts"
+    "execute": "tsx ExampleExternalCQLLibrary/execute-externalMultiplyFn.ts"
   },
   "author": "",
   "license": "ISC",

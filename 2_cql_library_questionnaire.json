@@ -8,7 +8,7 @@
       "url": "http://hl7.org/fhir/StructureDefinition/cqf-library",
       "valueString": "http://example.com/ExampleExternalCQLLibrary",
       "name": "ExampleExternalCQLLibrary",
-      "description": "External CQL Library that has an expression 'externalMultiplyFn' defined which we will call below. See https://hl7.org/fhir/R5/library.html to see library resource definition"
+      "description": "External CQL Library that contains an expression 'externalMultiplyFn'"
     }
   ],
   "item": [
@@ -20,9 +20,9 @@
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression.",
           "valueExpression": {
-            "description": "Multiply two numbers via cql expression found in an external library.  See https://build.fhir.org/ig/HL7/sdc/expressions.html#use-of-the-expression-type",
+            "description": "Multiply two numbers via cql expression found in an external library.",
             "language": "text/cql",
-            "reference": "#ExampleExternalCQLLibrary.externalMultiplyFn"
+            "reference": "\"ExampleExternalCQLLibrary\".externalMultiplyFn"
           }
         }
       ]
