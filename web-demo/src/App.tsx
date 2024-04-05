@@ -74,7 +74,7 @@ function App() {
             </button>
           </div>
         </form>
-        <h2>ELM outpu (depends on cql-to-elm translation hosted service)t</h2>
+        <h2>ELM output (depends on cql-to-elm translation hosted service)</h2>
         <pre
           style={{
             textAlign: "left",
