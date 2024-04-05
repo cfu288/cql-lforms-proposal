@@ -1,5 +1,7 @@
 # Exploring support for CQL in SDC Questionnaires and potential for executing CQL in the browser
 
+Repo researching how to add CQL support in Questionnaires to [lforms](https://github.com/lhncbc/lforms).
+
 See demo under `web-demo` directory. Requires [cql-translation-service](https://github.com/cqframework/cql-translation-service) to be running to translate CQL into executable ELM.
 
 ## **Inline CQL example**
