@@ -1,0 +1,61 @@
+{
+  "resourceType": "Questionnaire",
+  "status": "draft",
+  "id": "Example-CQL-Calculation-Questionnaire",
+  "title": "Example CQL Calculation Questionnaire",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/cqf-library",
+      "valueString": "http://localhost:5174/ExampleExternalCQLLibrary/ExampleExternalCQLLibrary.cql",
+      "name": "ExampleExternalCQLLibrary",
+      "description": "External CQL Library that contains an expression 'externalMultiplyFn'"
+    }
+  ],
+  "item": [
+    {
+      "text": "Multiply 2 * 3 in text/cql using external library",
+      "type": "string",
+      "required": false,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression",
+          "valueExpression": {
+            "description": "Multiply two numbers via cql expression found in an external library.",
+            "language": "text/cql",
+            "reference": "\"ExampleExternalCQLLibrary\".externalMultiplyFn"
+          }
+        }
+      ]
+    },
+    {
+      "text": "Get current datetime in text/cql using external library",
+      "type": "string",
+      "required": false,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression",
+          "valueExpression": {
+            "description": "Get current datetime with function found in an external library.",
+            "language": "text/cql",
+            "reference": "\"ExampleExternalCQLLibrary\".externalDateTimeFn"
+          }
+        }
+      ]
+    },
+    {
+      "text": "External function that should never be called. Multiples 3 * 3",
+      "type": "string",
+      "required": false,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression",
+          "valueExpression": {
+            "description": "This function should never be called.",
+            "language": "text/cql",
+            "reference": "\"ExampleExternalCQLLibrary\".externalBadFn"
+          }
+        }
+      ]
+    }
+  ]
+}

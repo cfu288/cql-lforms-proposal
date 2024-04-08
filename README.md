@@ -55,7 +55,7 @@ See demo under `web-demo` directory. Requires [cql-translation-service](https://
       "required": false,
       "extension": [
         {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression.",
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression",
           "valueExpression": {
             "description": "Multiply two numbers via cql expression found in an external library.",
             "language": "text/cql",
