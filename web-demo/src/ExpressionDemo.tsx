@@ -31,6 +31,7 @@ function ExpressionDemo() {
               Accept: "application/elm+json",
             },
             body: wrapExpressionInFunction(input),
+            // body: input,
           }
         );
         const data = await response.json();

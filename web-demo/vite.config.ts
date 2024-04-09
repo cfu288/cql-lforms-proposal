@@ -5,10 +5,9 @@ import react from "@vitejs/plugin-react";
 export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
-    base:
-      // mode === "development"
-      //   ? "http://localhost:5173/"
-      //   :
-      "/cql-lforms-proposal/",
+    base: "/cql-lforms-proposal/",
+    // mode === "development"https://cfu288.github.io/cql-lforms-proposal/
+    //   ? "http://localhost:5173/"
+    //   :
   };
 });

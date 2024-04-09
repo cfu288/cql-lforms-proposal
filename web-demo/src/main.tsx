@@ -7,11 +7,11 @@ import "./index.css";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/cql-lforms-proposal/",
     element: <ExpressionDemo />,
   },
   {
-    path: "/libraries",
+    path: "/cql-lforms-proposal/libraries",
     element: <LibraryDemo />,
   },
 ]);
