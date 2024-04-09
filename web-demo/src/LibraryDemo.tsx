@@ -3,6 +3,17 @@ import questionnaireExample from "./cql_library_questionnaire.json";
 import { Results, Library, Executor, PatientSource } from "cql-execution";
 import { NavBar } from "./NavBar";
 
+const EXPRESSION_URLS = [
+  "http://hl7.org/fhir/StructureDefinition/variable",
+  "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+  "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+  "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-candidateExpression",
+  "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-contextExpression",
+  "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression",
+  "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-enableWhenExpression",
+  "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerOptionsToggleExpression",
+];
+
 /**
  * Parse items with reference to external CQL library if url is calculatedExpression
  *
@@ -10,7 +21,7 @@ import { NavBar } from "./NavBar";
  * @param items Items in the questionnaire
  * @returns Items with reference to external CQL library
  */
-const parseItemsWithReference = (
+const getItemsWithReferenceToExternalLib = (
   items: Array<{
     extension: Array<{
       url: string;
@@ -25,15 +36,13 @@ const parseItemsWithReference = (
   return items?.filter((item) =>
     item.extension?.some(
       (ext) =>
-        ext.url ===
-          "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression" &&
-        ext.valueExpression?.reference
+        EXPRESSION_URLS.includes(ext.url) && ext.valueExpression?.reference
     )
   );
 };
 
 // Function to fetch external library
-const fetchAndTranslateExternalLibrary = async (url: string) => {
+const fetchAndTranslateExternalCQLLibraryToElm = async (url: string) => {
   const externalLibrary = await fetch(url);
   const externalLibraryText = await externalLibrary.text();
 
@@ -52,41 +61,25 @@ const fetchAndTranslateExternalLibrary = async (url: string) => {
 };
 
 // Function to execute CQL and handle caching
-const executeCqlAndHandleCaching = async (
+async function executeCqlAndHandleCaching(
   libraryName: string,
   processedLibraries: Record<string, Library>,
   externalCqlLibrary: Record<string, unknown>
-) => {
+): Promise<{
+  result: Results | null;
+  elm: Record<string, unknown>;
+}> {
   let library: Library | undefined;
   let elmResult: Record<string, unknown> = {};
   if (processedLibraries[libraryName]) {
     library = processedLibraries[libraryName];
   } else {
-    const elm = await fetchAndTranslateExternalLibrary(
+    const translatedElm = await fetchAndTranslateExternalCQLLibraryToElm(
       externalCqlLibrary["valueString"] as string
     );
-    if (elm && Object.keys(elm).length !== 0) {
-      elmResult = elm;
-    }
-
-    if (Object.keys(elm).length !== 0) {
-      library = new Library(elm);
-      processedLibraries[libraryName] = library;
-    }
-  }
-
-  if (processedLibraries[libraryName]) {
-    library = processedLibraries[libraryName];
-  } else {
-    const elm = await fetchAndTranslateExternalLibrary(
-      externalCqlLibrary["valueString"] as string
-    );
-    if (elm && Object.keys(elm).length !== 0) {
-      elmResult = elm;
-    }
-
-    if (Object.keys(elm).length !== 0) {
-      library = new Library(elm);
+    if (translatedElm && Object.keys(translatedElm).length !== 0) {
+      elmResult = translatedElm;
+      library = new Library(translatedElm);
       processedLibraries[libraryName] = library;
     }
   }
@@ -101,7 +94,7 @@ const executeCqlAndHandleCaching = async (
     result: null,
     elm: elmResult || {},
   };
-};
+}
 
 const parseAndRun = async (
   questionnaireData: Record<string, unknown>
@@ -119,7 +112,7 @@ const parseAndRun = async (
       };
     }>;
   }>;
-  const itemsWithReference = parseItemsWithReference(items);
+  const itemsWithReference = getItemsWithReferenceToExternalLib(items);
   if (!itemsWithReference || itemsWithReference.length === 0) {
     alert(
       "Items with reference to external CQL library not found in the questionnaire"
