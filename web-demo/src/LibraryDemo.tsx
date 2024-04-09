@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
-import cql, { Results } from "cql-execution";
 import questionnaireExample from "./cql_library_questionnaire.json";
+import { Results, Library, Executor, PatientSource } from "cql-execution";
 
 /**
  * Parse items with reference to external CQL library if url is calculatedExpression
@@ -53,10 +53,10 @@ const fetchAndTranslateExternalLibrary = async (url: string) => {
 // Function to execute CQL and handle caching
 const executeCqlAndHandleCaching = async (
   libraryName: string,
-  processedLibraries: Record<string, cql.Library>,
+  processedLibraries: Record<string, Library>,
   externalCqlLibrary: Record<string, unknown>
 ) => {
-  let library: cql.Library;
+  let library: Library | undefined;
   let elmResult: Record<string, unknown> = {};
   if (processedLibraries[libraryName]) {
     library = processedLibraries[libraryName];
@@ -69,14 +69,30 @@ const executeCqlAndHandleCaching = async (
     }
 
     if (Object.keys(elm).length !== 0) {
-      library = new cql.Library(elm);
+      library = new Library(elm);
+      processedLibraries[libraryName] = library;
+    }
+  }
+
+  if (processedLibraries[libraryName]) {
+    library = processedLibraries[libraryName];
+  } else {
+    const elm = await fetchAndTranslateExternalLibrary(
+      externalCqlLibrary["valueString"] as string
+    );
+    if (elm && Object.keys(elm).length !== 0) {
+      elmResult = elm;
+    }
+
+    if (Object.keys(elm).length !== 0) {
+      library = new Library(elm);
       processedLibraries[libraryName] = library;
     }
   }
 
   if (library) {
-    const executor = new cql.Executor(library);
-    const patientSource = new cql.PatientSource([]);
+    const executor = new Executor(library);
+    const patientSource = new PatientSource([]);
     const result: Results = await executor.exec(patientSource);
     return { result, elm: elmResult };
   }
@@ -92,7 +108,16 @@ const parseAndRun = async (
   elmData: Record<string, unknown>;
   cqlExecutionResult: Record<string, unknown> | null;
 }> => {
-  const items = questionnaireData["item"] as Array<Record<string, unknown>>;
+  const items = questionnaireData["item"] as Array<{
+    extension: Array<{
+      url: string;
+      valueExpression: {
+        description: string;
+        language: string;
+        reference: string;
+      };
+    }>;
+  }>;
   const itemsWithReference = parseItemsWithReference(items);
   if (!itemsWithReference || itemsWithReference.length === 0) {
     alert(
@@ -105,7 +130,7 @@ const parseAndRun = async (
     Record<string, unknown>
   >;
 
-  const processedLibraries: Record<string, cql.Library> = {};
+  const processedLibraries: Record<string, Library> = {};
   const elmData: Record<string, unknown> = {};
   let cqlExecutionResult: Record<string, unknown> | null = null;
 
@@ -147,10 +172,9 @@ const parseAndRun = async (
 
           if (result && result.unfilteredResults[functionName]) {
             cqlExecutionResult = {
-              ...cqlExecutionResult,
+              ...(cqlExecutionResult || {}),
               [functionName]: result.unfilteredResults[functionName],
             };
-            console.log(cqlExecutionResult);
           }
         } catch (error) {
           console.error(error);
@@ -158,8 +182,6 @@ const parseAndRun = async (
       }
     }
   }
-
-  console.log(cqlExecutionResult);
 
   return { elmData, cqlExecutionResult };
 };
