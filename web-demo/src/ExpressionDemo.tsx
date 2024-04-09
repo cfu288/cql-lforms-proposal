@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from "react";
-import cql, { Results } from "cql-execution";
+import { Executor, Library, PatientSource, Results } from "cql-execution";
 
 /**
  * The translation service does not accept CQL expressions directly. We can wrap the CQL expression in a function to execute.
@@ -44,9 +44,9 @@ function ExpressoinDemo() {
 
   useEffect(() => {
     if (Object.keys(elm).length !== 0) {
-      const lib = new cql.Library(elm);
-      const executor = new cql.Executor(lib);
-      const psource = new cql.PatientSource([]);
+      const lib = new Library(elm);
+      const executor = new Executor(lib);
+      const psource = new PatientSource([]);
 
       (async () => {
         try {
