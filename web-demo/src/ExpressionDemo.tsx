@@ -21,14 +21,17 @@ function ExpressoinDemo() {
       e.preventDefault();
       setIsLoading(true);
       try {
-        const response = await fetch("http://localhost:8080/cql/translator", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/cql",
-            Accept: "application/elm+json",
-          },
-          body: wrapExpressionInFunction(input),
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_TRANSLATOR_BASE_URL}/cql/translator`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/cql",
+              Accept: "application/elm+json",
+            },
+            body: wrapExpressionInFunction(input),
+          }
+        );
         const data = await response.json();
         setElm(data);
       } catch (error) {

@@ -36,14 +36,17 @@ const fetchAndTranslateExternalLibrary = async (url: string) => {
   const externalLibrary = await fetch(url);
   const externalLibraryText = await externalLibrary.text();
 
-  const response = await fetch("http://localhost:8080/cql/translator", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/cql",
-      Accept: "application/elm+json",
-    },
-    body: externalLibraryText,
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_TRANSLATOR_BASE_URL}/cql/translator`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/cql",
+        Accept: "application/elm+json",
+      },
+      body: externalLibraryText,
+    }
+  );
   return await response.json();
 };
 
