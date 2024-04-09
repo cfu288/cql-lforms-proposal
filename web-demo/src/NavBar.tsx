@@ -7,10 +7,10 @@ export function NavBar() {
       <nav>
         <ul>
           <li>
-            <Link to="/cql-lforms-proposal/">Expressions</Link>
+            <Link to="/cql-lforms-proposal/">Inline Expression Example</Link>
           </li>
           <li>
-            <Link to="/cql-lforms-proposal/libraries">Libraries</Link>
+            <Link to="/cql-lforms-proposal/libraries">CQL Library Example</Link>
           </li>
           <li>
             <a href="https://github.com/cfu288/cql-lforms-proposal">GitHub</a>
