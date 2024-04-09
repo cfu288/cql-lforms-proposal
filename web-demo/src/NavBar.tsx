@@ -7,10 +7,14 @@ export function NavBar() {
       <nav>
         <ul>
           <li>
-            <Link to={`${base}`}>Inline Expression Example</Link>
+            <Link to={`${base}`}>
+              Inline Expression Example with CQL `{"->"}` Elm Conversion
+            </Link>
           </li>
           <li>
-            <Link to={`${base}libraries`}>CQL Library Example</Link>
+            <Link to={`${base}libraries`}>
+              CQL Library Example with CQL `{"->"}` Elm Conversion
+            </Link>
           </li>
           <li>
             <a href="https://github.com/cfu288/cql-lforms-proposal">GitHub</a>
