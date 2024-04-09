@@ -41,21 +41,6 @@
           }
         }
       ]
-    },
-    {
-      "text": "External function that should never be called. Multiples 3 * 3",
-      "type": "string",
-      "required": false,
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression",
-          "valueExpression": {
-            "description": "This function should never be called.",
-            "language": "text/cql",
-            "reference": "\"ExampleExternalCQLLibrary\".externalBadFn"
-          }
-        }
-      ]
     }
   ]
 }
