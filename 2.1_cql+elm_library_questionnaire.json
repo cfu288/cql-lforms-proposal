@@ -8,7 +8,19 @@
       "url": "http://hl7.org/fhir/StructureDefinition/cqf-library",
       "valueString": "http://example.com/ExampleExternalCQLLibrary.cql",
       "name": "ExampleExternalCQLLibrary",
-      "description": "External CQL Library that contains an expression 'externalMultiplyFn'"
+      "description": "External CQL Library that contains an expression 'externalMultiplyFn'",
+      "content": {
+        "content-type": "text/cql"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/cqf-library",
+      "valueString": "http://example.com/ExampleExternalCQLLibrary.json",
+      "name": "ExampleExternalCQLLibrary",
+      "description": "External CQL Library that contains an expression 'externalMultiplyFn' - ELM JSON version",
+      "content": {
+        "content-type": "application/elm+json"
+      }
     }
   ],
   "item": [

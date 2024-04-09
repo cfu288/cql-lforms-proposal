@@ -4,7 +4,7 @@ Repo researching how to add CQL support in Questionnaires to [lforms](https://gi
 
 See demo under `web-demo` directory. Requires [cql-translation-service](https://github.com/cqframework/cql-translation-service) to be running to translate CQL into executable ELM (which a modified version has been included as a submodule).
 
-## **Inline CQL example**
+## **Inline CQL example in FHIR Questionnaire**
 
 ```json
 {
@@ -32,7 +32,9 @@ See demo under `web-demo` directory. Requires [cql-translation-service](https://
 }
 ```
 
-## **External CQL Example**
+## **External CQL Library Example in FHIR Questionnaire**
+
+- https://hl7.org/fhir/R5/library.html
 
 ```json
 {
@@ -84,6 +86,9 @@ npm run dev
 Requires [cql-translation-service](https://github.com/cqframework/cql-translation-service) to be running to translate CQL into executable ELM. It is included as a submodule in this repo. Changes have been made to the dockerfile to make it compatible with the web client in web-demo.
 
 ```bash
+cd cql-translation-service
+git submodule init
+git submodule update
 docker build -t cql-translation-service .
 docker run -t -i -p 8080:8000 cql-translation-service
 ```
