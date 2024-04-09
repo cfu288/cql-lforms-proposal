@@ -1,5 +1,6 @@
 import { useCallback, useState, useEffect } from "react";
 import { Executor, Library, PatientSource, Results } from "cql-execution";
+import { NavBar } from "./NavBar";
 
 /**
  * The translation service does not accept CQL expressions directly. We can wrap the CQL expression in a function to execute.
@@ -10,7 +11,7 @@ const wrapExpressionInFunction = (expression: string): string => {
   return `define __lforms__main__:\n  ${expression}`;
 };
 
-function ExpressoinDemo() {
+function ExpressionDemo() {
   const [input, setInput] = useState("");
   const [elm, setElm] = useState<Record<string, unknown>>({});
   const [cqlResult, setCqlResult] = useState<Results | null>(null);
@@ -61,6 +62,7 @@ function ExpressoinDemo() {
 
   return (
     <>
+      <NavBar />
       <h1>Running CQL in the browser demo</h1>
       <div>
         <form
@@ -176,4 +178,4 @@ function ExpressoinDemo() {
   );
 }
 
-export default ExpressoinDemo;
+export default ExpressionDemo;

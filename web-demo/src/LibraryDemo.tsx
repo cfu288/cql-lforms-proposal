@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import questionnaireExample from "./cql_library_questionnaire.json";
 import { Results, Library, Executor, PatientSource } from "cql-execution";
+import { NavBar } from "./NavBar";
 
 /**
  * Parse items with reference to external CQL library if url is calculatedExpression
@@ -211,6 +212,7 @@ function LibraryDemo() {
 
   return (
     <>
+      <NavBar />
       <h1>Running CQL in the browser demo</h1>
       <section>
         <h2>Example questionnaire:</h2>

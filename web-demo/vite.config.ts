@@ -6,8 +6,9 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     base:
-      mode === "development"
-        ? undefined
-        : "https://cfu288.github.io/cql-lforms-proposal/",
+      // mode === "development"
+      //   ? "http://localhost:5173/"
+      //   :
+      "/cql-lforms-proposal/",
   };
 });
