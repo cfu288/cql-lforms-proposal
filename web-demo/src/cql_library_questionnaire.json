@@ -6,7 +6,7 @@
   "extension": [
     {
       "url": "http://hl7.org/fhir/StructureDefinition/cqf-library",
-      "valueString": "http://localhost:5174/ExampleExternalCQLLibrary/ExampleExternalCQLLibrary.cql",
+      "valueString": "https://cfu288.github.io/cql-lforms-proposal/ExampleExternalCQLLibrary/ExampleExternalCQLLibrary.cql",
       "name": "ExampleExternalCQLLibrary",
       "description": "External CQL Library that contains an expression 'externalMultiplyFn'"
     }

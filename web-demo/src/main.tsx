@@ -5,13 +5,14 @@ import ExpressionDemo from "./ExpressionDemo.tsx";
 import LibraryDemo from "./LibraryDemo.tsx";
 import "./index.css";
 
+const base = import.meta.env.DEV ? "/" : "/cql-lforms-proposal/";
 const router = createBrowserRouter([
   {
-    path: "/cql-lforms-proposal/",
+    path: base,
     element: <ExpressionDemo />,
   },
   {
-    path: "/cql-lforms-proposal/libraries",
+    path: base + "libraries",
     element: <LibraryDemo />,
   },
 ]);
