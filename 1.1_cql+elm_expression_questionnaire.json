@@ -5,16 +5,26 @@
   "title": "Example CQL Calculation Questionnaire",
   "item": [
     {
-      "text": "Multiply 2 * 3 (text/cql)",
+      "text": "Multiply 2 * 3",
       "type": "string",
       "required": false,
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression",
           "valueExpression": {
-            "description": "Multiply two numbers via cql expression (todo)",
+            "description": "Multiply two numbers via cql expression",
             "language": "text/cql",
-            "expression": "2 * 3"
+            "expression": "2 * 3",
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/us/ecr/StructureDefinition/us-ph-alternative-expression-extension",
+                "valueExpression": {
+                  "language": "application/elm+json",
+                  "expression": "{\r\n    \"library\": {\r\n        \"annotation\": [\r\n            {\r\n                \"translatorVersion\": \"3.7.1\",\r\n                \"translatorOptions\": \"\",\r\n                \"signatureLevel\": \"None\",\r\n                \"type\": \"CqlToElmInfo\"\r\n            },\r\n            {\r\n                \"librarySystem\": \"/tmp/rep10165092951450227422tmp\",\r\n                \"libraryId\": \"rep10165092951450227422tmp\",\r\n                \"startLine\": 1,\r\n                \"startChar\": 0,\r\n                \"endLine\": 1,\r\n                \"endChar\": 0,\r\n                \"message\": \"Syntax error at 2\",\r\n                \"errorType\": \"syntax\",\r\n                \"errorSeverity\": \"error\",\r\n                \"type\": \"CqlToElmError\"\r\n            }\r\n        ],\r\n        \"identifier\": {},\r\n        \"schemaIdentifier\": {\r\n            \"id\": \"urn:hl7-org:elm\",\r\n            \"version\": \"r1\"\r\n        },\r\n        \"usings\": {\r\n            \"def\": [\r\n                {\r\n                    \"localIdentifier\": \"System\",\r\n                    \"uri\": \"urn:hl7-org:elm-types:r1\",\r\n                    \"annotation\": []\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}",
+                  "description": "Multiply two numbers via cql expression - Elm JSON"
+                }
+              }
+            ]
           }
         }
       ]

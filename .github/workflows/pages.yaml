@@ -41,6 +41,8 @@ jobs:
         run: cd web-demo && npm ci
 
       - name: Build
+        env:
+          VITE_TRANSLATOR_BASE_URL: ${{ env.VITE_TRANSLATOR_BASE_URL }}
         run: cd web-demo && npm run build
 
       - name: Setup Pages
