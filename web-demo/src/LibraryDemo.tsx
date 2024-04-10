@@ -190,11 +190,11 @@ async function parseAndRun(
 
         const externalCqlLibraries: CQFLibrary[] = extensions
           ? (extensions
-              // .filter(
-              //   (ext: Record<string, unknown>) =>
-              //     ext.url ===
-              //     "http://hl7.org/fhir/StructureDefinition/cqf-library"
-              // )
+              .filter(
+                (ext: Record<string, unknown>) =>
+                  ext.url ===
+                  "http://hl7.org/fhir/StructureDefinition/cqf-library"
+              )
               .filter(
                 (ext: unknown) => (ext as CQFLibrary).name === libraryName
               ) as CQFLibrary[])
