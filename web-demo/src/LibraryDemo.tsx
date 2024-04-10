@@ -30,40 +30,6 @@ function LibraryDemo() {
     <>
       <NavBar />
       <h1>Running CQL in the browser demo</h1>
-      <button
-        onClick={() => {
-          /**
-         * {
-  "resourceType": "Questionnaire",
-  "id": "Example-CQL-Calculation-Questionnaire",
-  "title": "Example CQL Calculation Questionnaire",
-  "extension": [
-    {
-      "url": "http://hl7.org/fhir/StructureDefinition/cqf-library",
-      "valueCanonical": "http://example.com/ExampleExternalCQLLibrary"
-    }
-         */
-          // update questionaire lib valueCanonical value to "https://cfu288.github.io/cql-lforms-proposal/cql+elm-library.json"
-          const newQuestionnaireData = JSON.parse(
-            JSON.stringify(questionnaireData)
-          );
-          // toggle between cql-library.json and cql+elm-library.json dynamically by checking the current value
-          const url = new URL(newQuestionnaireData.extension[0].valueCanonical);
-          const path = url.pathname;
-          const base = url.origin;
-          newQuestionnaireData.extension[0].valueCanonical =
-            path === "/cql-lforms-proposal/cql+elm-library.json"
-              ? base + "/cql-lforms-proposal/cql-library.json"
-              : base + "/cql-lforms-proposal/cql+elm-library.json";
-
-          setElmData({});
-          setCqlExecutionResult(null);
-          setQuestionnaireData(newQuestionnaireData);
-        }}
-      >
-        Toggle whether external CQL library contains only CQL or both CQL+ELM
-      </button>
-
       <section>
         <form
           onSubmit={handleFormSubmit}
@@ -120,6 +86,42 @@ function LibraryDemo() {
               Reset
             </button>
           </div>
+          <button
+            onClick={() => {
+              const newQuestionnaireData = JSON.parse(
+                JSON.stringify(questionnaireData)
+              );
+              // toggle between cql-library.json and cql+elm-library.json dynamically by checking the current value
+              const url = new URL(
+                newQuestionnaireData.extension[0].valueCanonical
+              );
+              const path = url.pathname;
+              const base = url.origin;
+              newQuestionnaireData.extension[0].valueCanonical =
+                path === "/cql-lforms-proposal/cql+elm-library.json"
+                  ? base + "/cql-lforms-proposal/cql-library.json"
+                  : base + "/cql-lforms-proposal/cql+elm-library.json";
+
+              setElmData({});
+              setCqlExecutionResult(null);
+              setQuestionnaireData(newQuestionnaireData);
+            }}
+          >
+            Toggle whether external CQL library contains only CQL or both
+            CQL+ELM
+          </button>
+          <p>
+            Current referenced CQL library in the questionaire below contains{" "}
+            {questionnaireData.extension[0].valueCanonical.includes(
+              "cql+elm-library.json"
+            )
+              ? "both CQL and ELM"
+              : "only CQL"}
+            . Click the blue button above to toggle.
+          </p>
+          <a href={questionnaireData.extension[0].valueCanonical}>
+            Ref: {questionnaireData.extension[0].valueCanonical}
+          </a>
         </form>
         <p>Example questionnaire with CQL Library Reference:</p>
         <pre
