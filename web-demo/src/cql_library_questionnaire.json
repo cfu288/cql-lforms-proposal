@@ -1,14 +1,11 @@
 {
   "resourceType": "Questionnaire",
-  "status": "draft",
   "id": "Example-CQL-Calculation-Questionnaire",
   "title": "Example CQL Calculation Questionnaire",
   "extension": [
     {
       "url": "http://hl7.org/fhir/StructureDefinition/cqf-library",
-      "valueString": "https://cfu288.github.io/cql-lforms-proposal/ExampleExternalCQLLibrary/ExampleExternalCQLLibrary.cql",
-      "name": "ExampleExternalCQLLibrary",
-      "description": "External CQL Library that contains an expression 'externalMultiplyFn'"
+      "valueCanonical": "https://cfu288.github.io/cql-lforms-proposal/cql+elm-library.json"
     }
   ],
   "item": [

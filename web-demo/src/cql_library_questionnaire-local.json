@@ -1,26 +1,11 @@
 {
   "resourceType": "Questionnaire",
-  "status": "draft",
   "id": "Example-CQL-Calculation-Questionnaire",
   "title": "Example CQL Calculation Questionnaire",
   "extension": [
     {
       "url": "http://hl7.org/fhir/StructureDefinition/cqf-library",
-      "valueString": "http://example.com/ExampleExternalCQLLibrary.cql",
-      "name": "ExampleExternalCQLLibrary",
-      "description": "External CQL Library that contains an expression 'externalMultiplyFn'",
-      "content": {
-        "content-type": "text/cql"
-      }
-    },
-    {
-      "url": "http://hl7.org/fhir/StructureDefinition/cqf-library",
-      "valueString": "http://example.com/ExampleExternalCQLLibrary.json",
-      "name": "ExampleExternalCQLLibrary",
-      "description": "External CQL Library that contains an expression 'externalMultiplyFn' - ELM JSON version",
-      "content": {
-        "content-type": "application/elm+json"
-      }
+      "valueCanonical": "http://localhost:5173/cql+elm-library.json"
     }
   ],
   "item": [
@@ -35,6 +20,21 @@
             "description": "Multiply two numbers via cql expression found in an external library.",
             "language": "text/cql",
             "reference": "\"ExampleExternalCQLLibrary\".externalMultiplyFn"
+          }
+        }
+      ]
+    },
+    {
+      "text": "Get current datetime in text/cql using external library",
+      "type": "string",
+      "required": false,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression",
+          "valueExpression": {
+            "description": "Get current datetime with function found in an external library.",
+            "language": "text/cql",
+            "reference": "\"ExampleExternalCQLLibrary\".externalDateTimeFn"
           }
         }
       ]

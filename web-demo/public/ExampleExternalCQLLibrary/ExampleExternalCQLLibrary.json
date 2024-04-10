@@ -1,50 +1,69 @@
 {
-   "library" : {
-      "annotation" : [ {
-         "translatorVersion" : "3.10.0-SNAPSHOT",
-         "translatorOptions" : "",
-         "signatureLevel" : "None",
-         "type" : "CqlToElmInfo"
-      } ],
-      "identifier" : {
-         "id" : "ExampleExternalCQLLibrary",
-         "version" : "1.0.0"
-      },
-      "schemaIdentifier" : {
-         "id" : "urn:hl7-org:elm",
-         "version" : "r1"
-      },
-      "usings" : {
-         "def" : [ {
-            "localIdentifier" : "System",
-            "uri" : "urn:hl7-org:elm-types:r1",
-            "annotation" : [ ]
-         } ]
-      },
-      "statements" : {
-         "def" : [ {
-            "name" : "externalMultiplyFn",
-            "context" : "Unfiltered",
-            "accessLevel" : "Public",
-            "annotation" : [ ],
-            "expression" : {
-               "type" : "Multiply",
-               "annotation" : [ ],
-               "signature" : [ ],
-               "operand" : [ {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                  "value" : "2",
-                  "type" : "Literal",
-                  "annotation" : [ ]
-               }, {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                  "value" : "3",
-                  "type" : "Literal",
-                  "annotation" : [ ]
-               } ]
-            }
-         } ]
+  "library": {
+    "annotation": [
+      {
+        "translatorVersion": "3.7.1",
+        "translatorOptions": "",
+        "signatureLevel": "None",
+        "type": "CqlToElmInfo"
       }
-   }
+    ],
+    "identifier": {
+      "id": "ExampleExternalCQLLibrary",
+      "version": "1.0.0"
+    },
+    "schemaIdentifier": {
+      "id": "urn:hl7-org:elm",
+      "version": "r1"
+    },
+    "usings": {
+      "def": [
+        {
+          "localIdentifier": "System",
+          "uri": "urn:hl7-org:elm-types:r1",
+          "annotation": []
+        }
+      ]
+    },
+    "statements": {
+      "def": [
+        {
+          "name": "externalMultiplyFn",
+          "context": "Unfiltered",
+          "accessLevel": "Public",
+          "annotation": [],
+          "expression": {
+            "type": "Multiply",
+            "annotation": [],
+            "signature": [],
+            "operand": [
+              {
+                "valueType": "{urn:hl7-org:elm-types:r1}Integer",
+                "value": "2",
+                "type": "Literal",
+                "annotation": []
+              },
+              {
+                "valueType": "{urn:hl7-org:elm-types:r1}Integer",
+                "value": "3",
+                "type": "Literal",
+                "annotation": []
+              }
+            ]
+          }
+        },
+        {
+          "name": "externalDateTimeFn",
+          "context": "Unfiltered",
+          "accessLevel": "Public",
+          "annotation": [],
+          "expression": {
+            "type": "Now",
+            "annotation": [],
+            "signature": []
+          }
+        }
+      ]
+    }
+  }
 }
-

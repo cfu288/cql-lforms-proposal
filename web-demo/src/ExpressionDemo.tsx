@@ -158,9 +158,11 @@ function ExpressionDemo() {
                   border: "1px solid #ccc",
                 }}
               >
-                {elm !== null
-                  ? JSON.stringify(elm, null, 2)
-                  : "Enter a CQL expression above to see the result here."}
+                {elm !== null ? (
+                  <code>{JSON.stringify(elm, null, 2)}</code>
+                ) : (
+                  "Enter a CQL expression above to see the result here."
+                )}
               </pre>
             </details>
           </section>
@@ -182,9 +184,11 @@ function ExpressionDemo() {
                 border: "1px solid #ccc",
               }}
             >
-              {cqlResult !== null
-                ? JSON.stringify(cqlResult, null, 2)
-                : "Enter a CQL expression above to see the result here."}
+              {cqlResult !== null ? (
+                <code>{JSON.stringify(cqlResult, null, 2)}</code>
+              ) : (
+                "Enter a CQL expression above to see the result here."
+              )}
             </pre>
           </section>
         )}

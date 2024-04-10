@@ -41,7 +41,13 @@ const getItemsWithReferenceToExternalLib = (
 
 // Function to fetch external library
 const fetchAndTranslateExternalCQLLibraryToElm = async (url: string) => {
-  const externalLibrary = await fetch(url);
+  const externalLibrary = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/cql",
+      Accept: "application/elm+json",
+    },
+  });
   const externalLibraryText = await externalLibrary.text();
 
   const response = await fetch(
@@ -58,16 +64,14 @@ const fetchAndTranslateExternalCQLLibraryToElm = async (url: string) => {
   return await response.json();
 };
 
+const fetchExternalLibraryResource = async (url: string) => {
+  const response = await fetch(url);
+  return await response.json();
+};
+
 type CQFLibrary = {
   url: "http://hl7.org/fhir/StructureDefinition/cqf-library";
-  valueString: string;
-  name: string;
-  description: string;
-  extension?: Array<{
-    content: {
-      "content-type": "text/cql" | "application/elm+json";
-    };
-  }>;
+  valueCanonical: string;
 };
 
 /**
@@ -93,40 +97,36 @@ async function executeCQLLib({
   let library: Library | undefined;
   let libraryElm: Record<string, unknown> = {};
 
-  const libraryName = externalCqlLibraries[0].name;
+  const externalLibraryResource = await fetchExternalLibraryResource(
+    externalCqlLibraries[0].valueCanonical
+  );
+
+  const libraryName = externalLibraryResource.name;
 
   if (processedLibraries[libraryName]) {
     library = processedLibraries[libraryName];
   } else {
-    const externalElmCqlLibrary = externalCqlLibraries.find(
-      (lib) =>
-        lib?.extension?.[0].content["content-type"] === "application/elm+json"
+    const elmContent = externalLibraryResource.content.find(
+      (content: { contentType: string }) =>
+        content.contentType === "application/elm+json"
+    );
+    const cqlContent = externalLibraryResource.content.find(
+      (content: { contentType: string }) => content.contentType === "text/cql"
     );
 
-    if (externalElmCqlLibrary) {
-      const response = await fetch(externalElmCqlLibrary.valueString);
-      libraryElm = await response.json();
+    if (elmContent) {
+      const elmResponse = await fetch(elmContent.url);
+      const elmJson = await elmResponse.json();
+      libraryElm = elmJson;
       library = new Library(libraryElm);
       processedLibraries[libraryName] = library;
-    } else {
-      let externalCqlLibrary = externalCqlLibraries.find(
-        (lib) => lib?.extension?.[0].content["content-type"] === "text/cql"
+    } else if (cqlContent) {
+      // Call the /cql/translator service here to convert CQL to ELM
+      libraryElm = await fetchAndTranslateExternalCQLLibraryToElm(
+        cqlContent.url
       );
-      // no content type is valid too, assume it is cql
-      if (!externalCqlLibrary && externalCqlLibraries.length === 1) {
-        externalCqlLibrary = externalCqlLibraries[0];
-      }
-
-      if (externalCqlLibrary) {
-        const translatedElm = await fetchAndTranslateExternalCQLLibraryToElm(
-          externalCqlLibrary.valueString
-        );
-        if (translatedElm && Object.keys(translatedElm).length !== 0) {
-          libraryElm = translatedElm;
-          library = new Library(translatedElm);
-          processedLibraries[libraryName] = library;
-        }
-      }
+      library = new Library(libraryElm);
+      processedLibraries[libraryName] = library;
     }
   }
 
@@ -189,15 +189,13 @@ async function parseAndRun(
           .split(".");
 
         const externalCqlLibraries: CQFLibrary[] = extensions
-          ? (extensions
+          ? extensions
               .filter(
                 (ext: Record<string, unknown>) =>
                   ext.url ===
                   "http://hl7.org/fhir/StructureDefinition/cqf-library"
               )
-              .filter(
-                (ext: unknown) => (ext as CQFLibrary).name === libraryName
-              ) as CQFLibrary[])
+              .map((ext: unknown) => ext as CQFLibrary)
           : [];
 
         if (!externalCqlLibraries) {
