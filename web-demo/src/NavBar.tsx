@@ -7,7 +7,10 @@ export function NavBar() {
       <nav>
         <ul>
           <li>
-            <Link to={`${base}`}>
+            <Link to={`${base}`}>Home</Link>
+          </li>
+          <li>
+            <Link to={`${base}expressions`}>
               Inline CQL Expression Example with CQL {"->"} Elm Conversion
             </Link>
           </li>
