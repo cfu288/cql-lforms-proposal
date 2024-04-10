@@ -1,6 +1,6 @@
 # Exploring support for CQL in SDC Questionnaires and potential for executing CQL in the browser
 
-This repository explores the feasability of adding support for CQL in FHIR Questionnaires. The goal is to allow for the execution of CQL expressions in the browser. This would allow for the creation of dynamic forms that can calculate values based on CQL expressions.
+This repository explores the feasibility of adding support for CQL in FHIR Questionnaires. The goal is to allow for the execution of CQL expressions in the browser. This would allow for the creation of dynamic forms that can calculate values based on CQL expressions.
 
 The ultimate goal is to add CQL support to [LForms](https://github.com/lhncbc/lforms).
 
