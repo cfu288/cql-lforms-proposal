@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+
 import questionnaireExample from "./cql_library_questionnaire.json";
 import { NavBar } from "./NavBar";
 import { parseAndRun } from "./parseAndRun";
@@ -167,7 +168,7 @@ function LibraryDemo() {
               setQuestionnaireData(newQuestionnaireData);
             }}
           >
-            {questionnaireData.extension[0].valueCanonical.includes(
+            {(questionnaireData.extension as any[])[0].valueCanonical.includes(
               "cql+elm-library.json"
             )
               ? "Switch to a CQL only library"
