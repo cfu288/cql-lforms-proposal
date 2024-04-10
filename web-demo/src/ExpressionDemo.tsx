@@ -65,6 +65,20 @@ function ExpressionDemo() {
     <>
       <NavBar />
       <h1>Inline CQL in the browser demo</h1>
+      <p>
+        This demo takes a user-entered CQL expression, converts it to ELM using
+        a hosted{" "}
+        <a href="https://github.com/cfu288/cql-translation-service">
+          cql-to-elm translation service
+        </a>{" "}
+        , and executes the ELM using the cql-execution library in the browser.
+      </p>
+      {/* <p>
+        TODO: If elm is provided directly as a us-ph-alternative-expression, use
+        the pre-converted elm instead of converting the CQL to ELM. Currently
+        not possible since the reference conversion service does not understand
+        inline CQL expressions.
+      </p> */}
       <div>
         <form
           onSubmit={handleSubmit}

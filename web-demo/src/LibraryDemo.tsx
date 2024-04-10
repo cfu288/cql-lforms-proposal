@@ -134,8 +134,14 @@ function LibraryDemo() {
               "cql+elm-library.json"
             )
               ? "both CQL and ELM"
-              : "only CQL. This means a translation service will be used to convert the CQL to ELM before execution."}
-            . Click the blue button below to toggle. Current library reference:{" "}
+              : "only CQL. This means a translation service will be used to convert the CQL to ELM before execution"}
+            . Click the blue button below to toggle to a{" "}
+            {(questionnaireData.extension as any[])[0].valueCanonical.includes(
+              "cql+elm-library.json"
+            )
+              ? "CQL only library"
+              : "CQL+ELM library"}{" "}
+            . Current library reference:{" "}
             <a href={(questionnaireData.extension as any[])[0].valueCanonical}>
               {(questionnaireData.extension as any[])[0].valueCanonical}
             </a>

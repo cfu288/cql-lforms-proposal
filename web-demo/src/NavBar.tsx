@@ -13,7 +13,7 @@ export function NavBar() {
           </li>
           <li>
             <Link to={`${base}libraries`}>
-              CQL Library Example with CQL {"->"} Elm Conversion
+              FHIR questionnaire with CQL Library Example
             </Link>
           </li>
           <li>
