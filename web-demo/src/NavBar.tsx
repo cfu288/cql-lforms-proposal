@@ -8,12 +8,12 @@ export function NavBar() {
         <ul>
           <li>
             <Link to={`${base}`}>
-              Inline Expression Example with CQL `{"->"}` Elm Conversion
+              Inline CQL Expression Example with CQL {"->"} Elm Conversion
             </Link>
           </li>
           <li>
             <Link to={`${base}libraries`}>
-              CQL Library Example with CQL `{"->"}` Elm Conversion
+              CQL Library Example with CQL {"->"} Elm Conversion
             </Link>
           </li>
           <li>

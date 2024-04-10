@@ -7,3 +7,15 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+@keyframes flash {
+  0% {
+    background-color: var(--accent-bg);
+  }
+  50% {
+    background-color: rgb(255, 253, 208);
+  }
+  100% {
+    background-color: var(--accent-bg);
+  }
+}

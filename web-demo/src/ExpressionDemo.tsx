@@ -64,7 +64,7 @@ function ExpressionDemo() {
   return (
     <>
       <NavBar />
-      <h1>Running CQL in the browser demo</h1>
+      <h1>Inline CQL in the browser demo</h1>
       <div>
         <form
           onSubmit={handleSubmit}
