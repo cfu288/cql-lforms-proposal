@@ -101,15 +101,17 @@ function ExpressionDemo() {
               style={{
                 padding: "10px",
                 fontSize: "1em",
-                backgroundColor: "#4CAF50",
+                backgroundColor: isLoading ? "#ccc" : "#4CAF50",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
                 cursor: "pointer",
                 width: "50%",
+                transition: "background-color 1s ease",
               }}
+              disabled={isLoading}
             >
-              Run
+              {isLoading ? "Loading" : "Run"}
             </button>
             <button
               onClick={() => {
@@ -133,47 +135,59 @@ function ExpressionDemo() {
               Reset
             </button>
           </div>
-          <p style={{ textAlign: "center", color: "#f44336" }}>
-            {isLoading && "Loading"}
-          </p>
         </form>
-        <h2>
-          ELM output (depends on{" "}
-          <a href="https://github.com/cqframework/cql-translation-service">
-            cql-to-elm translation service
-          </a>
-          )
-        </h2>
-        <pre
-          style={{
-            textAlign: "left",
-            maxWidth: "100%",
-            maxHeight: "350px",
-            overflowX: "auto",
-            overflowY: "auto",
-            border: "1px solid #ccc",
-          }}
-        >
-          {JSON.stringify(elm, null, 2)}
-        </pre>
-        <h2>
-          CQL output (using{" "}
-          <a href="https://github.com/cqframework/cql-execution?tab=readme-ov-file">
-            cql-execution
-          </a>{" "}
-          library)
-        </h2>
-        <pre
-          style={{
-            maxWidth: "100%",
-            overflowX: "auto",
-            border: "1px solid #ccc",
-          }}
-        >
-          {cqlResult !== null
-            ? JSON.stringify(cqlResult, null, 2)
-            : "Enter a CQL expression above to see the result here."}
-        </pre>
+        {Object.entries(elm).length > 0 && (
+          <section>
+            <details>
+              <summary>Library ELM transformation</summary>
+              <h2>Library ELM transformation</h2>
+              <p>
+                (depends on{" "}
+                <a href="https://github.com/cqframework/cql-translation-service">
+                  cql-to-elm translation service
+                </a>
+                )
+              </p>
+              <pre
+                style={{
+                  textAlign: "left",
+                  maxWidth: "100%",
+                  maxHeight: "350px",
+                  overflowX: "auto",
+                  overflowY: "auto",
+                  border: "1px solid #ccc",
+                }}
+              >
+                {elm !== null
+                  ? JSON.stringify(elm, null, 2)
+                  : "Enter a CQL expression above to see the result here."}
+              </pre>
+            </details>
+          </section>
+        )}
+        {cqlResult && (
+          <section>
+            <h2>CQL output</h2>
+            <p>
+              (using{" "}
+              <a href="https://github.com/cqframework/cql-execution?tab=readme-ov-file">
+                cql-execution
+              </a>{" "}
+              library)
+            </p>
+            <pre
+              style={{
+                maxWidth: "100%",
+                overflowX: "auto",
+                border: "1px solid #ccc",
+              }}
+            >
+              {cqlResult !== null
+                ? JSON.stringify(cqlResult, null, 2)
+                : "Enter a CQL expression above to see the result here."}
+            </pre>
+          </section>
+        )}
       </div>
     </>
   );

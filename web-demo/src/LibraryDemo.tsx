@@ -15,9 +15,7 @@ const EXPRESSION_URLS = [
 ];
 
 /**
- * Parse items with reference to external CQL library if url is calculatedExpression
- *
- * This is overly simplistic, real world use cases will need to handle more than only calculatedExpression's
+ * Parse items with reference to external CQL library
  * @param items Items in the questionnaire
  * @returns Items with reference to external CQL library
  */
@@ -60,48 +58,97 @@ const fetchAndTranslateExternalCQLLibraryToElm = async (url: string) => {
   return await response.json();
 };
 
-// Function to execute CQL and handle caching
-async function executeCqlAndHandleCaching(
-  libraryName: string,
-  processedLibraries: Record<string, Library>,
-  externalCqlLibrary: Record<string, unknown>
-): Promise<{
+type CQFLibrary = {
+  url: "http://hl7.org/fhir/StructureDefinition/cqf-library";
+  valueString: string;
+  name: string;
+  description: string;
+  extension?: Array<{
+    content: {
+      "content-type": "text/cql" | "application/elm+json";
+    };
+  }>;
+};
+
+/**
+ * Execute a CQL library
+ * @param {Object} args
+ * @param {Record<string, unknown>} args.externalCqlLibraries - The external CQL library extension array, can contain multiple references to the same library (different versions like cql vs elm)
+ * @param {unknown[]} args.patientSource - The patient source to execute the CQL query on
+ * @param {Record<string, Library>} [args.processedLibraries] - A reference to previously processed and cached libraries
+ * @returns
+ */
+async function executeCQLLib({
+  externalCqlLibraries,
+  patientSource = [],
+  processedLibraries = {},
+}: {
+  externalCqlLibraries: CQFLibrary[];
+  patientSource?: unknown[];
+  processedLibraries?: Record<string, Library>;
+}): Promise<{
   result: Results | null;
   elm: Record<string, unknown>;
 }> {
   let library: Library | undefined;
-  let elmResult: Record<string, unknown> = {};
+  let libraryElm: Record<string, unknown> = {};
+
+  const libraryName = externalCqlLibraries[0].name;
+
   if (processedLibraries[libraryName]) {
     library = processedLibraries[libraryName];
   } else {
-    const translatedElm = await fetchAndTranslateExternalCQLLibraryToElm(
-      externalCqlLibrary["valueString"] as string
+    const externalElmCqlLibrary = externalCqlLibraries.find(
+      (lib) =>
+        lib?.extension?.[0].content["content-type"] === "application/elm+json"
     );
-    if (translatedElm && Object.keys(translatedElm).length !== 0) {
-      elmResult = translatedElm;
-      library = new Library(translatedElm);
+
+    if (externalElmCqlLibrary) {
+      const response = await fetch(externalElmCqlLibrary.valueString);
+      libraryElm = await response.json();
+      library = new Library(libraryElm);
       processedLibraries[libraryName] = library;
+    } else {
+      let externalCqlLibrary = externalCqlLibraries.find(
+        (lib) => lib?.extension?.[0].content["content-type"] === "text/cql"
+      );
+      // no content type is valid too, assume it is cql
+      if (!externalCqlLibrary && externalCqlLibraries.length === 1) {
+        externalCqlLibrary = externalCqlLibraries[0];
+      }
+
+      if (externalCqlLibrary) {
+        const translatedElm = await fetchAndTranslateExternalCQLLibraryToElm(
+          externalCqlLibrary.valueString
+        );
+        if (translatedElm && Object.keys(translatedElm).length !== 0) {
+          libraryElm = translatedElm;
+          library = new Library(translatedElm);
+          processedLibraries[libraryName] = library;
+        }
+      }
     }
   }
 
   if (library) {
-    const executor = new Executor(library);
-    const patientSource = new PatientSource([]);
-    const result: Results = await executor.exec(patientSource);
-    return { result, elm: elmResult };
+    const executor = new Executor(library),
+      ps = new PatientSource(patientSource),
+      result: Results = await executor.exec(ps);
+    return { result, elm: libraryElm };
   }
   return {
     result: null,
-    elm: elmResult || {},
+    elm: libraryElm || {},
   };
 }
 
-const parseAndRun = async (
+async function parseAndRun(
   questionnaireData: Record<string, unknown>
 ): Promise<{
   elmData: Record<string, unknown>;
   cqlExecutionResult: Record<string, unknown> | null;
-}> => {
+}> {
+  // Get questionnaire items
   const items = questionnaireData["item"] as Array<{
     extension: Array<{
       url: string;
@@ -112,6 +159,7 @@ const parseAndRun = async (
       };
     }>;
   }>;
+  // Filter to just the items with a reference to an external CQL library
   const itemsWithReference = getItemsWithReferenceToExternalLib(items);
   if (!itemsWithReference || itemsWithReference.length === 0) {
     alert(
@@ -140,10 +188,19 @@ const parseAndRun = async (
           .replace(/"/g, "")
           .split(".");
 
-        const externalCqlLibrary = extensions?.find(
-          (ext: Record<string, unknown>) => ext["name"] === libraryName
-        );
-        if (!externalCqlLibrary) {
+        const externalCqlLibraries: CQFLibrary[] = extensions
+          ? (extensions
+              // .filter(
+              //   (ext: Record<string, unknown>) =>
+              //     ext.url ===
+              //     "http://hl7.org/fhir/StructureDefinition/cqf-library"
+              // )
+              .filter(
+                (ext: unknown) => (ext as CQFLibrary).name === libraryName
+              ) as CQFLibrary[])
+          : [];
+
+        if (!externalCqlLibraries) {
           alert("External CQL library not found in the questionnaire");
           return {
             elmData: {},
@@ -152,17 +209,14 @@ const parseAndRun = async (
         }
 
         try {
-          const { result, elm } = await executeCqlAndHandleCaching(
-            libraryName,
+          const { result, elm } = await executeCQLLib({
             processedLibraries,
-            externalCqlLibrary
-          );
+            externalCqlLibraries,
+          });
 
           if (Object.keys(elm).length !== 0) {
             elmData[libraryName] = elm;
           }
-
-          console.log(result);
 
           if (result && result.unfilteredResults[functionName]) {
             cqlExecutionResult = {
@@ -178,7 +232,7 @@ const parseAndRun = async (
   }
 
   return { elmData, cqlExecutionResult };
-};
+}
 
 function LibraryDemo() {
   const [questionnaireData] =
@@ -208,10 +262,6 @@ function LibraryDemo() {
       <NavBar />
       <h1>Running CQL in the browser demo</h1>
       <section>
-        <h2>Example questionnaire:</h2>
-        <pre>{JSON.stringify(questionnaireData, null, 2)}</pre>
-      </section>
-      <div>
         <form
           onSubmit={handleFormSubmit}
           style={{
@@ -268,18 +318,33 @@ function LibraryDemo() {
             </button>
           </div>
         </form>
+        <p>Example questionnaire with CQL Library Reference:</p>
+        <pre
+          style={{
+            textAlign: "left",
+            maxWidth: "100%",
+            maxHeight: "500px",
+            overflowX: "auto",
+            overflowY: "auto",
+            border: "1px solid #ccc",
+            fontSize: "small",
+          }}
+        >
+          {JSON.stringify(questionnaireData, null, 2)}
+        </pre>
+      </section>
+      {Object.entries(elmData).length > 0 && (
         <section>
           <details>
             <summary>Library ELM transformation</summary>
             <h2>Library ELM transformation</h2>
-            <p style={{ color: "#333" }}>
+            <p>
               (depends on{" "}
               <a href="https://github.com/cqframework/cql-translation-service">
                 cql-to-elm translation service
               </a>
               )
             </p>
-
             <pre
               style={{
                 textAlign: "left",
@@ -298,39 +363,43 @@ function LibraryDemo() {
             </pre>
           </details>
         </section>
-        <section>
-          <h2>Form executed CQL output</h2>
-          <p>
-            (using{" "}
-            <a href="https://github.com/cqframework/cql-execution?tab=readme-ov-file">
-              cql-execution
-            </a>{" "}
-            library)
-          </p>
-          <table
-            style={{
-              maxWidth: "100%",
-              overflowX: "auto",
-              border: "1px solid #ccc",
-            }}
-          >
-            {cqlExecutionResult !== null ? (
-              Object.entries(cqlExecutionResult).map(([key, value]) => (
-                <tr key={key}>
-                  <td>
-                    <strong>{key}:</strong>
-                  </td>
-                  <td>{JSON.stringify(value, null, 2)}</td>
+      )}
+      {cqlExecutionResult && (
+        <>
+          <section>
+            <h2>Form executed CQL output</h2>
+            <p>
+              (using{" "}
+              <a href="https://github.com/cqframework/cql-execution?tab=readme-ov-file">
+                cql-execution
+              </a>{" "}
+              library)
+            </p>
+            <table
+              style={{
+                maxWidth: "100%",
+                overflowX: "auto",
+                border: "1px solid #ccc",
+              }}
+            >
+              {cqlExecutionResult !== null ? (
+                Object.entries(cqlExecutionResult).map(([key, value]) => (
+                  <tr key={key}>
+                    <td>
+                      <strong>{key}:</strong>
+                    </td>
+                    <td>{JSON.stringify(value, null, 2)}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td>Enter a CQL expression above to see the result here.</td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td>Enter a CQL expression above to see the result here.</td>
-              </tr>
-            )}
-          </table>
-        </section>
-      </div>
+              )}
+            </table>
+          </section>
+        </>
+      )}
     </>
   );
 }
