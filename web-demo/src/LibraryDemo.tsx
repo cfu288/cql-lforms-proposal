@@ -112,15 +112,15 @@ function LibraryDemo() {
           </button>
           <p>
             Current referenced CQL library in the questionaire below contains{" "}
-            {questionnaireData.extension[0].valueCanonical.includes(
+            {(questionnaireData.extension as any[])[0].valueCanonical.includes(
               "cql+elm-library.json"
             )
               ? "both CQL and ELM"
               : "only CQL"}
             . Click the blue button above to toggle.
           </p>
-          <a href={questionnaireData.extension[0].valueCanonical}>
-            Ref: {questionnaireData.extension[0].valueCanonical}
+          <a href={(questionnaireData.extension as any[])[0].valueCanonical}>
+            Ref: {(questionnaireData.extension as any[])[0].valueCanonical}
           </a>
         </form>
         <p>Example questionnaire with CQL Library Reference:</p>
