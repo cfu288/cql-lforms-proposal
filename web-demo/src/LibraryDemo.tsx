@@ -180,7 +180,8 @@ function LibraryDemo() {
           <details>
             <summary>Library ELM Representation</summary>
             <p>
-              (If only CQL is provided, depends on{" "}
+              (If only a CQL representation is provided in the library,
+              conversion depends on a{" "}
               <a href="https://github.com/cqframework/cql-translation-service">
                 cql-to-elm translation service
               </a>{" "}

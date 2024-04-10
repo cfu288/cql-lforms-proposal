@@ -73,6 +73,23 @@ function ExpressionDemo() {
         </a>{" "}
         , and executes the ELM using the cql-execution library in the browser.
       </p>
+      <p>
+        <mark>Note:</mark> Since the{" "}
+        <a href="https://github.com/cfu288/cql-translation-service">
+          cql-to-elm translation service
+        </a>{" "}
+        does not accept single line CQL expressions, the user entered expression
+        will be wrapped into a function before translation.
+        <code>
+          <pre>
+            define __lforms__main__:
+            <br />
+            &nbsp;&nbsp;{input || "<Enter CQL Expression>"}
+          </pre>
+        </code>
+        and the result will be extracted from the <code>__lforms__main__</code>{" "}
+        definition.
+      </p>
       {/* <p>
         TODO: If elm is provided directly as a us-ph-alternative-expression, use
         the pre-converted elm instead of converting the CQL to ELM. Currently
@@ -92,7 +109,8 @@ function ExpressionDemo() {
             htmlFor="cql"
             style={{ fontSize: "1.2em", fontWeight: "bold" }}
           >
-            Enter CQL expression (e.g., Now() or 2*3 ):
+            Enter CQL expression (e.g., <code>Now()</code> or <code>2*3</code>{" "}
+            ):
           </label>
           <input
             type="text"
