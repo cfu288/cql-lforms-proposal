@@ -2,7 +2,9 @@
 
 Repo researching how to add CQL support in Questionnaires to [lforms](https://github.com/lhncbc/lforms).
 
-See demo under `web-demo` directory. Requires [cql-translation-service](https://github.com/cqframework/cql-translation-service) to be running to translate CQL into executable ELM (which a modified version has been included as a submodule).
+[Live demo here](https://cfu288.github.io/cql-lforms-proposal/)
+
+See source for demo under `web-demo` directory. Requires [cql-translation-service](https://github.com/cqframework/cql-translation-service) to be running to translate CQL into executable ELM (which a modified version has been included as a submodule). I am hosting a version of the translation service at `https://cqltranslationservice.foureighteen.dev/cql/translator`.
 
 ## **Inline CQL example in FHIR Questionnaire**
 

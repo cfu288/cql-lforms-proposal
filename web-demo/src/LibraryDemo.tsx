@@ -114,6 +114,9 @@ async function executeCQLLib({
       (content: { contentType: string }) => content.contentType === "text/cql"
     );
 
+    // below were assuming all external references to libs via content.url
+    // TODO: handle if a base64 encoded data is provided as a content.data
+
     if (elmContent) {
       const elmResponse = await fetch(elmContent.url);
       const elmJson = await elmResponse.json();
