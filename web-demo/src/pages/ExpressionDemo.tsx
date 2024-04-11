@@ -64,7 +64,11 @@ function ExpressionDemo() {
         <a href="https://github.com/cfu288/cql-translation-service">
           cql-to-elm translation service
         </a>{" "}
-        , and executes the ELM using the cql-execution library in the browser.
+        , and executes the ELM using the{" "}
+        <a href="https://github.com/cqframework/cql-execution?tab=readme-ov-file">
+          cql-execution
+        </a>{" "}
+        library in the browser.
       </p>
       <p>
         <mark>Note:</mark> Since the{" "}
