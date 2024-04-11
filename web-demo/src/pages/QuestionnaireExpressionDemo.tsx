@@ -77,9 +77,11 @@ function QuestionnaireExpressionDemo() {
       <p>
         This does mean that providing an alternate Elm representation of the CQL
         via a us-ph-alternative-expression-extension is not currently possible.
-        This demo will not attempt to use a
-        us-ph-alternative-expression-extension elm+json representation if it
-        exists and will always use the CQL expression with above workaround.
+        Even if it was possible,{" "}
+        <a href="https://hl7.org/fhir/us/ecr/STU2.1/StructureDefinition-us-ph-alternative-expression-extension.html">
+          the current Context of Use in the IG
+        </a>{" "}
+        does not include questionnaires.
       </p>
       <section>
         <p>Current questionnaire with CQL inline expressions:</p>
