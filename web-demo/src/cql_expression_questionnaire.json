@@ -1,0 +1,45 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "Example-CQL-Calculation-Questionnaire",
+  "title": "Example CQL Calculation Questionnaire",
+  "item": [
+    {
+      "text": "Multiply 2 * 3",
+      "type": "string",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression",
+          "valueExpression": {
+            "description": "Multiply two numbers via cql expression",
+            "language": "text/cql",
+            "expression": "2 * 3",
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/us/ecr/StructureDefinition/us-ph-alternative-expression-extension",
+                "valueExpression": {
+                  "language": "application/elm+json",
+                  "expression": "{\"library\":{\"annotation\":[{\"translatorVersion\":\"3.7.1\",\"translatorOptions\":\"\",\"signatureLevel\":\"None\",\"type\":\"CqlToElmInfo\"}],\"identifier\":{},\"schemaIdentifier\":{\"id\":\"urn:hl7-org:elm\",\"version\":\"r1\"},\"usings\":{\"def\":[{\"localIdentifier\":\"System\",\"uri\":\"urn:hl7-org:elm-types:r1\",\"annotation\":[]}]},\"statements\":{\"def\":[{\"name\":\"__lforms__main__\",\"context\":\"Unfiltered\",\"accessLevel\":\"Public\",\"annotation\":[],\"expression\":{\"type\":\"Multiply\",\"annotation\":[],\"signature\":[],\"operand\":[{\"valueType\":\"{urn:hl7-org:elm-types:r1}Integer\",\"value\":\"2\",\"type\":\"Literal\",\"annotation\":[]},{\"valueType\":\"{urn:hl7-org:elm-types:r1}Integer\",\"value\":\"3\",\"type\":\"Literal\",\"annotation\":[]}]}}]}}}",
+                  "description": "Multiply two numbers via cql expression - Elm JSON"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "text": "Get the current date",
+      "type": "string",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression",
+          "valueExpression": {
+            "description": "Get current datetime via cql inline expression",
+            "language": "text/cql",
+            "expression": "Now()"
+          }
+        }
+      ]
+    }
+  ]
+}

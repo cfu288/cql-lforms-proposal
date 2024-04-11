@@ -4,7 +4,7 @@ import questionnaireExample from "./cql_library_questionnaire.json";
 import { NavBar } from "./NavBar";
 import { parseAndRun } from "./parseAndRun";
 
-function LibraryDemo() {
+function QuestionnaireLibraryDemo() {
   const [questionnaireData, setQuestionnaireData] =
     useState<Record<string, unknown>>(questionnaireExample);
   const [elmData, setElmData] = useState<Record<string, unknown>>({});
@@ -58,7 +58,7 @@ function LibraryDemo() {
   return (
     <>
       <NavBar />
-      <h1>FHIR Questionnaire CQL in browser execution</h1>
+      <h1>FHIR Questionnaire CQL *library* in browser execution demo</h1>
       <p>
         This demo parses a FHIR Questionnaire with a CQL library reference and
         executes the referenced CQL methods in the questionnaire from the
@@ -247,4 +247,4 @@ function LibraryDemo() {
   );
 }
 
-export default LibraryDemo;
+export default QuestionnaireLibraryDemo;

@@ -1,4 +1,5 @@
 import { Results, Library, Executor, PatientSource } from "cql-execution";
+import { wrapExpressionInFunction } from "./wrapExpressionInFunction";
 
 const EXPRESSION_URLS = [
   "http://hl7.org/fhir/StructureDefinition/variable",
@@ -10,23 +11,25 @@ const EXPRESSION_URLS = [
   "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-enableWhenExpression",
   "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerOptionsToggleExpression",
 ];
+
+type FormItems = Array<{
+  extension: Array<{
+    url: string;
+    valueExpression: {
+      description: string;
+      language: string;
+      expression: string | null;
+      reference: string | null;
+    };
+  }>;
+}>;
+
 /**
  * Parse items with reference to external CQL library
  * @param items Items in the questionnaire
  * @returns Items with reference to external CQL library
  */
-const getItemsWithReferenceToExternalLib = (
-  items: Array<{
-    extension: Array<{
-      url: string;
-      valueExpression: {
-        description: string;
-        language: string;
-        reference: string;
-      };
-    }>;
-  }>
-) => {
+const getCalculatableItemsWithReferenceToExternalLib = (items: FormItems) => {
   return items?.filter((item) =>
     item.extension?.some(
       (ext) =>
@@ -34,6 +37,16 @@ const getItemsWithReferenceToExternalLib = (
     )
   );
 };
+
+const getCalculatableItemsWithInlineExpressions = (items: FormItems) => {
+  return items?.filter((item) =>
+    item.extension?.some(
+      (ext) =>
+        EXPRESSION_URLS.includes(ext.url) && ext.valueExpression?.expression
+    )
+  );
+};
+
 // Function to fetch external library
 const fetchAndTranslateExternalCQLLibraryToElm = async (url: string) => {
   const externalLibrary = await fetch(url, {
@@ -136,61 +149,140 @@ async function executeCQLLib({
     elm: libraryElm || {},
   };
 }
+
+// Helper functions
+function getQuestionnaireItems(
+  questionnaireData: Record<string, unknown>
+): FormItems {
+  return questionnaireData["item"] as FormItems;
+}
+
+function filterItemsWithExternalLibReference(items: FormItems): FormItems {
+  return getCalculatableItemsWithReferenceToExternalLib(items);
+}
+
+function filterItemsWithInlineExpressions(items: FormItems): FormItems {
+  return getCalculatableItemsWithInlineExpressions(items);
+}
+
+function isEmpty(items: FormItems): boolean {
+  return !items || items.length === 0;
+}
+
+function getQuestionnaireExtensions(
+  questionnaireData: Record<string, unknown>
+): Array<Record<string, unknown>> {
+  return questionnaireData["extension"] as Array<Record<string, unknown>>;
+}
+
+function hasValueExpressionReference(
+  extension: Record<string, unknown>
+): boolean {
+  return !!(
+    extension["valueExpression"] &&
+    (extension["valueExpression"] as Record<string, unknown>)["reference"]
+  );
+}
+
+function getValueExpressionReference(
+  extension: Record<string, unknown>
+): string {
+  return (extension["valueExpression"] as Record<string, unknown>)[
+    "reference"
+  ] as string;
+}
+
+function parseReference(reference: string): [string, string] {
+  return reference.replace(/"/g, "").split(".") as [string, string];
+}
+
+function getExternalCqlLibraries(
+  extensions: Array<Record<string, unknown>>
+): CQFLibrary[] {
+  return extensions
+    ? extensions
+        .filter(
+          (ext: Record<string, unknown>) =>
+            ext.url === "http://hl7.org/fhir/StructureDefinition/cqf-library"
+        )
+        .map((ext: unknown) => ext as CQFLibrary)
+    : [];
+}
+
+function isNotEmpty(elm: Record<string, unknown>): boolean {
+  return Object.keys(elm).length !== 0;
+}
+
+function hasUnfilteredResult(result: Results, functionName: string): boolean {
+  return result && result.unfilteredResults[functionName];
+}
+
+function hasValueExpression(extension: Record<string, unknown>): boolean {
+  return !!(
+    extension["valueExpression"] &&
+    (extension["valueExpression"] as Record<string, unknown>)["expression"]
+  );
+}
+
+function getValueExpression(extension: Record<string, unknown>): string {
+  return (extension["valueExpression"] as Record<string, unknown>)[
+    "expression"
+  ] as string;
+}
+
+async function fetchAndTranslateCqlToElm(
+  wrappedExpression: string
+): Promise<Record<string, unknown>> {
+  const response = await fetch(
+    `${import.meta.env.VITE_TRANSLATOR_BASE_URL}/cql/translator`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/cql",
+        Accept: "application/elm+json",
+      },
+      body: wrappedExpression,
+    }
+  );
+  return await response.json();
+}
+
+function getUnfilteredResult(result: Results, functionName: string): unknown {
+  return result.unfilteredResults[functionName];
+}
+
+function getUnfilteredMainResult(result: Results): unknown {
+  return result.unfilteredResults["__lforms__main__"];
+}
+
+// Main function
 export async function parseAndRun(
   questionnaireData: Record<string, unknown>
 ): Promise<{
   elmData: Record<string, unknown>;
   cqlExecutionResult: Record<string, unknown> | null;
 }> {
-  // Get questionnaire items
-  const items = questionnaireData["item"] as Array<{
-    extension: Array<{
-      url: string;
-      valueExpression: {
-        description: string;
-        language: string;
-        reference: string;
-      };
-    }>;
-  }>;
-  // Filter to just the items with a reference to an external CQL library
-  const itemsWithReference = getItemsWithReferenceToExternalLib(items);
-  if (!itemsWithReference || itemsWithReference.length === 0) {
-    alert(
-      "Items with reference to external CQL library not found in the questionnaire"
-    );
+  const items = getQuestionnaireItems(questionnaireData);
+  const itemsWithReferenceToExternalLib =
+    filterItemsWithExternalLibReference(items);
+  const itemsWithInlineCQL = filterItemsWithInlineExpressions(items);
+
+  if (isEmpty(itemsWithReferenceToExternalLib) && isEmpty(itemsWithInlineCQL)) {
     return { elmData: {}, cqlExecutionResult: null };
   }
 
-  const extensions = questionnaireData["extension"] as Array<
-    Record<string, unknown>
-  >;
-
+  const extensions = getQuestionnaireExtensions(questionnaireData);
   const processedLibraries: Record<string, Library> = {};
   const elmData: Record<string, unknown> = {};
   let cqlExecutionResult: Record<string, unknown> | null = null;
 
-  // Loop through items with reference
-  for (const itemWithReference of itemsWithReference) {
+  for (const itemWithReference of itemsWithReferenceToExternalLib) {
     for (const extension of itemWithReference["extension"]) {
-      if (
-        extension["valueExpression"] &&
-        extension["valueExpression"]["reference"]
-      ) {
-        const reference = extension["valueExpression"]["reference"];
-        const [libraryName, functionName] = reference
-          .replace(/"/g, "")
-          .split(".");
+      if (hasValueExpressionReference(extension)) {
+        const reference = getValueExpressionReference(extension);
+        const [libraryName, functionName] = parseReference(reference);
 
-        const externalCqlLibraries: CQFLibrary[] = extensions
-          ? extensions
-              .filter(
-                (ext: Record<string, unknown>) =>
-                  ext.url ===
-                  "http://hl7.org/fhir/StructureDefinition/cqf-library"
-              )
-              .map((ext: unknown) => ext as CQFLibrary)
-          : [];
+        const externalCqlLibraries = getExternalCqlLibraries(extensions);
 
         if (!externalCqlLibraries) {
           alert("External CQL library not found in the questionnaire");
@@ -206,16 +298,43 @@ export async function parseAndRun(
             externalCqlLibraries,
           });
 
-          if (Object.keys(elm).length !== 0) {
+          if (isNotEmpty(elm)) {
             elmData[libraryName] = elm;
           }
 
-          if (result && result.unfilteredResults[functionName]) {
-            cqlExecutionResult = {
-              ...(cqlExecutionResult || {}),
-              [functionName]: result.unfilteredResults[functionName],
-            };
+          if (result) {
+            if (hasUnfilteredResult(result, functionName)) {
+              cqlExecutionResult = {
+                ...(cqlExecutionResult || {}),
+                [functionName]: getUnfilteredResult(result, functionName),
+              };
+            }
           }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+  }
+
+  for (const itemWithInlineCQL of itemsWithInlineCQL) {
+    for (const extension of itemWithInlineCQL["extension"]) {
+      if (hasValueExpression(extension)) {
+        const expression = getValueExpression(extension);
+        const wrappedExpression = wrapExpressionInFunction(expression);
+        try {
+          const data = await fetchAndTranslateCqlToElm(wrappedExpression);
+          elmData[expression] = data;
+
+          const lib = new Library(data);
+          const executor = new Executor(lib);
+          const psource = new PatientSource([]);
+
+          const result: Results = await executor.exec(psource);
+          cqlExecutionResult = {
+            ...(cqlExecutionResult || {}),
+            [expression]: getUnfilteredMainResult(result),
+          };
         } catch (error) {
           console.error(error);
         }

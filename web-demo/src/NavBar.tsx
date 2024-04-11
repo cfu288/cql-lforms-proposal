@@ -1,21 +1,26 @@
 import { Link } from "react-router-dom";
+import { AppRoutes } from "./Routes";
 
 export function NavBar() {
-  const base = import.meta.env.DEV ? "/" : "/cql-lforms-proposal/";
   return (
     <header>
       <nav>
         <ul>
           <li>
-            <Link to={`${base}`}>Home</Link>
+            <Link to={AppRoutes.home}>Home</Link>
           </li>
           <li>
-            <Link to={`${base}expressions`}>
+            <Link to={AppRoutes.expressions}>
               Inline CQL Expression Example with CQL {"->"} Elm Conversion
             </Link>
           </li>
           <li>
-            <Link to={`${base}libraries`}>
+            <Link to={AppRoutes.questionnaireInlineExpressions}>
+              FHIR questionnaire with Inline CQL Example
+            </Link>
+          </li>
+          <li>
+            <Link to={AppRoutes.questionnaireLibraries}>
               FHIR questionnaire with CQL Library Example
             </Link>
           </li>

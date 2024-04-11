@@ -5,22 +5,27 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ExpressionDemo from "./ExpressionDemo.tsx";
-import LibraryDemo from "./LibraryDemo.tsx";
-import { Root } from "./Root.tsx";
+import QuestionnaireLibraryDemo from "./QuestionnaireLibraryDemo.tsx";
+import { Home } from "./Home.tsx";
+import { AppRoutes } from "./Routes.tsx";
+import QuestionnaireExpressionDemo from "./QuestionnaireExpressionDemo.tsx";
 
-const base = import.meta.env.DEV ? "/" : "/cql-lforms-proposal/";
 const router = createBrowserRouter([
   {
-    path: base,
-    element: <Root />,
+    path: AppRoutes.home,
+    element: <Home />,
   },
   {
-    path: base + "expressions",
+    path: AppRoutes.expressions,
     element: <ExpressionDemo />,
   },
   {
-    path: base + "libraries",
-    element: <LibraryDemo />,
+    path: AppRoutes.questionnaireInlineExpressions,
+    element: <QuestionnaireExpressionDemo />,
+  },
+  {
+    path: AppRoutes.questionnaireLibraries,
+    element: <QuestionnaireLibraryDemo />,
   },
 ]);
 
