@@ -17,17 +17,18 @@ The goal is to allow for the following:
     1. Fetch the external CQL library and translate it into ELM
     2. Have the ELM representation provided alongside of the CQL library using a [cqf-library](http://hl7.org/fhir/StructureDefinition/cqf-library) extension.
 
-[This repository is accompanied by a live demo here](https://cfu288.github.io/cql-lforms-proposal/). See source for demo under `web-demo` directory. For examples where an elm representation is not provided, an external api service[cql-translation-service](https://github.com/cqframework/cql-translation-service) is required to be running to translate the CQL into executable ELM. A modified version of that service has been included in this repo as a submodule). I am hosting a version of the translation service at `https://cqltranslationservice.foureighteen.dev/cql/translator` for the purposes of this demo.
+[This repository is accompanied by a live demo here](https://cfu288.github.io/cql-lforms-proposal/). See source for demo under `web-demo` directory. For examples where an elm representation is not provided, an external api service [cql-translation-service](https://github.com/cqframework/cql-translation-service) is required to be running to translate the CQL into executable ELM. A modified version of that service has been included in this repo as a submodule). I am hosting a version of the translation service at `https://cqltranslationservice.foureighteen.dev/cql/translator` for the purposes of this demo.
 
 ## Barriers to implementation
 
 - The current IGs for including CQL (both expressions and libraries) in questionnaires is not clear, with no easy to find example FHIR questionnaires that show how this might be done (Hopefully this repository can help with that!).
-- Currently, the reference CQL to ELM translation service is not available in the browser. This requires the use of a server-side service to translate CQL to ELM.
-- Currently, the reference ELM to CQL translation service does not translate inline CQL expressions to elm. This makes publishing the ELM representation of the CQL expression alongside the CQL expression impossible.
+- Currently, the reference CQL to ELM translation service is written in Java, no implementation exists that can run only in the browser. This requires the use of a server-side service to translate CQL to ELM.
+- Currently, the reference ELM to CQL translation service does not translate inline CQL expressions to ELM. This makes publishing the ELM representation of the CQL expression alongside the CQL expression impossible.
+  - Currently, [us-ph-alternative-expression-extension](http://hl7.org/fhir/us/ecr/StructureDefinition/us-ph-alternative-expression-extension) is not supported in questionnaires, so even if we could generate an ELM representation of an inline CQL expression, it would not be possible to include it in the questionnaire.
 
 # Example Questionnaires with CQL and ELM
 
-## **Inline CQL + ELM example in FHIR Questionnaire**
+## **Inline CQL example in FHIR Questionnaire**
 
 ```json
 {
@@ -44,17 +45,7 @@ The goal is to allow for the following:
           "valueExpression": {
             "description": "Multiply two numbers via cql expression",
             "language": "text/cql",
-            "expression": "2 * 3",
-            "extension": [
-              {
-                "url": "http://hl7.org/fhir/us/ecr/StructureDefinition/us-ph-alternative-expression-extension",
-                "valueExpression": {
-                  "language": "application/elm+json",
-                  "expression": "{\"library\": \"Insert Valid Library ELM Here\"}",
-                  "description": "Multiply two numbers via cql expression - Elm JSON"
-                }
-              }
-            ]
+            "expression": "2 * 3"
           }
         }
       ]
