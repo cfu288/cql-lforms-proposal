@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 
 import questionnaireExample from "./cql_library_questionnaire.json";
 import { NavBar } from "./NavBar";
-import { parseAndRun } from "./parseAndRun";
+import { parseQuestionnaireAndRunCQL } from "./parseQuestionnaireAndRunCQL";
 
 function QuestionnaireLibraryDemo() {
   const [questionnaireData, setQuestionnaireData] =
@@ -19,7 +19,7 @@ function QuestionnaireLibraryDemo() {
       e.preventDefault();
       setLoadingStatus(true);
       const { elmData, cqlExecutionResult } =
-        await parseAndRun(questionnaireData);
+        await parseQuestionnaireAndRunCQL(questionnaireData);
       setElmData(elmData);
       setCqlExecutionResult(cqlExecutionResult);
       setLoadingStatus(false);
