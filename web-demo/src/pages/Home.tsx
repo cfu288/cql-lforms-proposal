@@ -1,7 +1,7 @@
 // @ts-ignore
 import markdown from "../../README.md";
 import ReactMarkdown from "react-markdown";
-import { NavBar } from "./NavBar.tsx";
+import { NavBar } from "../components/NavBar.tsx";
 
 export function Home() {
   return (

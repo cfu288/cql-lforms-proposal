@@ -5,7 +5,7 @@
   "extension": [
     {
       "url": "http://hl7.org/fhir/StructureDefinition/cqf-library",
-      "valueCanonical": "http://localhost:5173/cql+elm-library.json"
+      "valueCanonical": "https://cfu288.github.io/cql-lforms-proposal/cql+elm-library.json"
     }
   ],
   "item": [

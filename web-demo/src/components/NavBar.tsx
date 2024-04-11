@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { AppRoutes } from "./Routes";
+import { AppRoutes } from "../Routes";
 
 export function NavBar() {
   return (

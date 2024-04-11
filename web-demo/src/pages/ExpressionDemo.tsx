@@ -1,8 +1,8 @@
 import { Executor, Library, PatientSource, Results } from "cql-execution";
 import { useCallback, useEffect, useState } from "react";
 
-import { NavBar } from "./NavBar";
-import { wrapExpressionInFunction } from "./wrapExpressionInFunction";
+import { NavBar } from "../components/NavBar";
+import { wrapExpressionInFunction } from "../utils/wrapExpressionInFunction";
 
 function ExpressionDemo() {
   const [input, setInput] = useState("");

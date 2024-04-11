@@ -4,11 +4,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import ExpressionDemo from "./ExpressionDemo.tsx";
-import QuestionnaireLibraryDemo from "./QuestionnaireLibraryDemo.tsx";
-import { Home } from "./Home.tsx";
+import ExpressionDemo from "./pages/ExpressionDemo.tsx";
+import QuestionnaireLibraryDemo from "./pages/QuestionnaireLibraryDemo.tsx";
+import { Home } from "./pages/Home.tsx";
 import { AppRoutes } from "./Routes.tsx";
-import QuestionnaireExpressionDemo from "./QuestionnaireExpressionDemo.tsx";
+import QuestionnaireExpressionDemo from "./pages/QuestionnaireExpressionDemo.tsx";
 
 const router = createBrowserRouter([
   {

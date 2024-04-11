@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 
-import questionnaireExample from "./cql_library_questionnaire.json";
-import { NavBar } from "./NavBar";
-import { parseQuestionnaireAndRunCQL } from "./parseQuestionnaireAndRunCQL";
+import questionnaireExample from "../cql_library_questionnaire.json";
+import { NavBar } from "../components/NavBar";
+import { parseQuestionnaireAndRunCQL } from "../cql-handling/parseQuestionnaireAndRunCQL";
 
 function QuestionnaireLibraryDemo() {
   const [questionnaireData, setQuestionnaireData] =

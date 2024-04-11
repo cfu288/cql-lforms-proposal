@@ -1,5 +1,5 @@
 import { Results, Library, Executor, PatientSource } from "cql-execution";
-import { wrapExpressionInFunction } from "./wrapExpressionInFunction";
+import { wrapExpressionInFunction } from "../utils/wrapExpressionInFunction";
 
 const CALCULATABLE_EXPRESSION_URLS = [
   "http://hl7.org/fhir/StructureDefinition/variable",
@@ -287,6 +287,12 @@ function getUnfilteredResult(result: Results, functionName: string): unknown {
   return result.unfilteredResults[functionName];
 }
 
+/**
+ * For inline expressions, the main result is stored in the "__lforms__main__" key.
+ * Fetches the main result from the unfiltered results.
+ * @param result
+ * @returns
+ */
 function getUnfilteredMainResult(result: Results): unknown {
   return result.unfilteredResults["__lforms__main__"];
 }

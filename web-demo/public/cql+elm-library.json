@@ -1,16 +1,16 @@
 {
   "resourceType": "Library",
-  "url": "http://localhost:5173/cql+elm-library.json",
+  "url": "https://cfu288.github.io/cql-lforms-proposal/cql+elm-library.json",
   "name": "ExampleExternalCQLLibrary",
   "description": "External CQL Library that contains an expression 'externalMultiplyFn' and 'externalDateTimeFn'. References to content are in 'content' array. Note that these are external refs but could be embedded in this resource under 'content.data' as a base64 encoded string.",
   "content": [
     {
       "contentType": "text/cql",
-      "url": "http://localhost:5173/ExampleExternalCQLLibrary/ExampleExternalCQLLibrary.cql"
+      "url": "https://cfu288.github.io/cql-lforms-proposal/ExampleExternalCQLLibrary/ExampleExternalCQLLibrary.cql"
     },
     {
       "contentType": "application/elm+json",
-      "url": "http://localhost:5173/ExampleExternalCQLLibrary/ExampleExternalCQLLibrary.json"
+      "url": "https://cfu288.github.io/cql-lforms-proposal/ExampleExternalCQLLibrary/ExampleExternalCQLLibrary.json"
     }
   ]
 }
