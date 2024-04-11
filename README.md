@@ -6,18 +6,18 @@ This repository explores the feasibility of adding support for CQL in FHIR Quest
 
 The ultimate goal is to add CQL support to [LForms](https://github.com/lhncbc/lforms).
 
-The goal is to allow for the following:
+To achieve this goal, the following is required:
 
 - Within a FHIR Questionnaire, allow for the inclusion of inline CQL expressions that can be executed in the browser.
   - This requires the ability to either
     1. Translate the CQL inline expression into ELM
-    2. Have the ELM representation provided alongside of the CQL inline expression using a [us-ph-alternative-expression-extension](http://hl7.org/fhir/us/ecr/StructureDefinition/us-ph-alternative-expression-extension) extension.
+    2. Have the ELM representation provided alongside of the CQL inline expression using a [us-ph-alternative-expression-extension](http://hl7.org/fhir/us/ecr/StructureDefinition/us-ph-alternative-expression-extension) extension. **Currently not supported in questionnaires**
 - Within a FHIR Questionnaire, allow for the inclusion of references to external CQL libraries that can be used to execute CQL expressions in the browser.
   - This requires the ability to either
     1. Fetch the external CQL library and translate it into ELM
     2. Have the ELM representation provided alongside of the CQL library using a [cqf-library](http://hl7.org/fhir/StructureDefinition/cqf-library) extension.
 
-[This repository is accompanied by a live demo here](https://cfu288.github.io/cql-lforms-proposal/). See source for demo under `web-demo` directory. For examples where an elm representation is not provided, an external api service [cql-translation-service](https://github.com/cqframework/cql-translation-service) is required to be running to translate the CQL into executable ELM. A modified version of that service has been included in this repo as a submodule). I am hosting a version of the translation service at `https://cqltranslationservice.foureighteen.dev/cql/translator` for the purposes of this demo.
+[This repository is accompanied by a live demo here](https://cfu288.github.io/cql-lforms-proposal/). Depends on an external api service [cql-translation-service](https://github.com/cqframework/cql-translation-service). I am hosting a version of the translation service at [https://cqltranslationservice.foureighteen.dev/cql/translator](https://cqltranslationservice.foureighteen.dev/cql/translator) for the purposes of this demo.
 
 ## Barriers to implementation
 
@@ -112,7 +112,9 @@ The goal is to allow for the following:
 
 [![demo video](https://github.com/cfu288/cql-lforms-proposal/assets/2985976/ac32716f-c673-480e-93da-c0821586c8a9)](https://github.com/cfu288/cql-lforms-proposal/assets/2985976/ac32716f-c673-480e-93da-c0821586c8a9)
 
-Note: Requires running cql-translation-service at localhost:8080
+See source for demo under `web-demo` directory. For examples where an elm representation is not provided, an external api service [cql-translation-service](https://github.com/cqframework/cql-translation-service) is required to be running to translate the CQL into executable ELM.
+
+Note: Requires running cql-translation-service at localhost:8080, or using the hosted version at `https://cqltranslationservice.foureighteen.dev/cql/translator`.
 
 ```bash
 cd web-demo

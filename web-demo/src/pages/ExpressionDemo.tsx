@@ -43,14 +43,14 @@ function ExpressionDemo() {
       const executor = new Executor(lib);
       const psource = new PatientSource([]);
 
-      (async () => {
-        try {
-          const result: Results = await executor.exec(psource);
+      executor
+        .exec(psource)
+        .then((result: Results) => {
           setCqlResult(result.unfilteredResults["__lforms__main__"]);
-        } catch (err) {
+        })
+        .catch((err) => {
           alert(err);
-        }
-      })();
+        });
     }
   }, [elm]);
 
@@ -70,29 +70,7 @@ function ExpressionDemo() {
         </a>{" "}
         library in the browser.
       </p>
-      <p>
-        <mark>Note:</mark> Since the{" "}
-        <a href="https://github.com/cfu288/cql-translation-service">
-          cql-to-elm translation service
-        </a>{" "}
-        does not accept single line CQL expressions, the user entered expression
-        will be wrapped into a function before translation.
-        <code>
-          <pre>
-            define __lforms__main__:
-            <br />
-            &nbsp;&nbsp;{input || "<Enter CQL Expression>"}
-          </pre>
-        </code>
-        and the result will be extracted from the <code>__lforms__main__</code>{" "}
-        definition.
-      </p>
-      {/* <p>
-        TODO: If elm is provided directly as a us-ph-alternative-expression, use
-        the pre-converted elm instead of converting the CQL to ELM. Currently
-        not possible since the reference conversion service does not understand
-        inline CQL expressions.
-      </p> */}
+
       <div>
         <form
           onSubmit={handleSubmit}
@@ -165,62 +143,128 @@ function ExpressionDemo() {
             </button>
           </div>
         </form>
-        {Object.entries(elm).length > 0 && (
+        {/* <p>
+        TODO: If elm is provided directly as a us-ph-alternative-expression, use
+        the pre-converted elm instead of converting the CQL to ELM. Currently
+        not possible since the reference conversion service does not understand
+        inline CQL expressions.
+      </p> */}
+
+        {cqlResult && (
           <section>
+            <h2>Execution details</h2>
+            {Object.entries(elm).length > 0 && (
+              <>
+                <p>
+                  <mark>Note:</mark> Since the{" "}
+                  <a href="https://github.com/cfu288/cql-translation-service">
+                    cql-to-elm translation service
+                  </a>{" "}
+                  does not accept single line CQL expressions, the user entered
+                  expression will be wrapped into a function before translation.
+                </p>
+                <details>
+                  <summary>1) Wrapping CQL expression</summary>
+                  <p>
+                    Prior to translation of CQL to elm, the user-entered CQL
+                    expression is wrapped in a function definition:
+                  </p>
+                  <code>
+                    <pre>
+                      define __lforms__main__:
+                      <br />
+                      &nbsp;&nbsp;{input || "<Enter CQL Expression>"}
+                    </pre>
+                  </code>
+                  In step 3, we will need to extract the from the{" "}
+                  <code>__lforms__main__</code> executed function.
+                </details>
+                <details>
+                  <summary>2) CQL to ELM transformation</summary>
+                  <p>
+                    The above wrapped expression is sent to an external{" "}
+                    <a href="https://github.com/cqframework/cql-translation-service">
+                      cql-to-elm translation service
+                    </a>
+                    . The response below is the ELM representation of the CQL
+                    function we created in step 1.
+                  </p>
+                  <pre
+                    style={{
+                      textAlign: "left",
+                      maxWidth: "100%",
+                      maxHeight: "350px",
+                      overflowX: "auto",
+                      overflowY: "auto",
+                      border: "1px solid #ccc",
+                    }}
+                  >
+                    {elm !== null ? (
+                      <code>{JSON.stringify(elm, null, 2)}</code>
+                    ) : (
+                      "Enter a CQL expression above to see the result here."
+                    )}
+                  </pre>
+                </details>
+              </>
+            )}
             <details>
-              <summary>Library ELM transformation</summary>
-              <h2>Library ELM transformation</h2>
+              <summary>3) CQL execution</summary>
               <p>
-                (depends on{" "}
-                <a href="https://github.com/cqframework/cql-translation-service">
-                  cql-to-elm translation service
-                </a>
-                )
+                We then take the above ELM from step 2 and pass it to the{" "}
+                <a href="https://github.com/cqframework/cql-execution?tab=readme-ov-file">
+                  cql-execution
+                </a>{" "}
+                library to execute. Since we wrapped the user-entered CQL in a
+                function, the result is extracted result of the{" "}
+                <code>__lforms__main__</code> function execution.
+                <code>
+                  <pre>
+                    {`const lib = new Library(elm);
+const executor = new Executor(lib);
+const psource = new PatientSource([]);
+
+executor
+  .exec(psource)
+  .then((result: Results) => {
+    // Result here is the result of the user-entered CQL expression
+    console.log(result.unfilteredResults["__lforms__main__"]);
+  })
+  .catch((err) => {
+    alert(err);
+  });`}
+                  </pre>
+                </code>
               </p>
-              <pre
-                style={{
-                  textAlign: "left",
-                  maxWidth: "100%",
-                  maxHeight: "350px",
-                  overflowX: "auto",
-                  overflowY: "auto",
-                  border: "1px solid #ccc",
-                }}
-              >
-                {elm !== null ? (
-                  <code>{JSON.stringify(elm, null, 2)}</code>
-                ) : (
-                  "Enter a CQL expression above to see the result here."
-                )}
-              </pre>
             </details>
           </section>
         )}
-        {cqlResult && (
-          <section>
-            <h2>CQL output</h2>
-            <p>
-              (using{" "}
-              <a href="https://github.com/cqframework/cql-execution?tab=readme-ov-file">
-                cql-execution
-              </a>{" "}
-              library)
-            </p>
-            <pre
-              style={{
-                maxWidth: "100%",
-                overflowX: "auto",
-                border: "1px solid #ccc",
-              }}
-            >
-              {cqlResult !== null ? (
-                <code>{JSON.stringify(cqlResult, null, 2)}</code>
-              ) : (
-                "Enter a CQL expression above to see the result here."
-              )}
-            </pre>
-          </section>
-        )}
+
+        <p>Result:</p>
+        <table style={{ width: "100%", border: "1px solid #ccc" }}>
+          <thead>
+            <tr>
+              <th>Expression</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style={{ overflowX: "auto" }}>
+                {input ? input : "Enter a CQL expression above."}
+              </td>
+              <td style={{ overflowX: "auto" }}>
+                {cqlResult !== null ? (
+                  <code>{JSON.stringify(cqlResult, null, 2)}</code>
+                ) : input ? (
+                  "Click run to see the result here"
+                ) : (
+                  "Enter a CQL expression above."
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </>
   );
