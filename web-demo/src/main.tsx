@@ -7,7 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ExpressionDemo from "./pages/ExpressionDemo.tsx";
 import QuestionnaireLibraryDemo from "./pages/QuestionnaireLibraryDemo.tsx";
 import { Home } from "./pages/Home.tsx";
-import { AppRoutes } from "./Routes.tsx";
+import { AppRoutes } from "./components/Routes";
 import QuestionnaireExpressionDemo from "./pages/QuestionnaireExpressionDemo.tsx";
 
 const router = createBrowserRouter([
