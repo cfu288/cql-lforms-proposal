@@ -1,1 +1,0 @@
-define main: 2*3
