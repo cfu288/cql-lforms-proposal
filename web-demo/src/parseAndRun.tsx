@@ -71,6 +71,7 @@ const fetchAndTranslateExternalCQLLibraryToElm = async (url: string) => {
   );
   return await response.json();
 };
+
 const fetchExternalLibraryResource = async (url: string) => {
   const response = await fetch(url);
   return await response.json();
@@ -87,7 +88,6 @@ type CQFLibrary = {
  * @param {Record<string, Library>} [args.processedLibraries] - A reference to previously processed and cached libraries
  * @returns
  */
-
 async function executeCQLLib({
   externalCqlLibraries,
   patientSource = [],

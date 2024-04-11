@@ -24,7 +24,7 @@ function QuestionnaireLibraryDemo() {
       setCqlExecutionResult(cqlExecutionResult);
       setLoadingStatus(false);
     },
-    [questionnaireData]
+    []
   );
 
   const qd = JSON.stringify(questionnaireData, null, 2);
@@ -128,7 +128,6 @@ function QuestionnaireLibraryDemo() {
               Reset
             </button>
           </div>
-
           <p>
             Current referenced CQL library in the questionaire below contains{" "}
             {(questionnaireData.extension as any[])[0].valueCanonical.includes(
@@ -148,7 +147,9 @@ function QuestionnaireLibraryDemo() {
             </a>
           </p>
           <button
-            onClick={() => {
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
               const newQuestionnaireData = JSON.parse(
                 JSON.stringify(questionnaireData)
               );
