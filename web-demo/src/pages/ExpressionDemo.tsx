@@ -176,7 +176,7 @@ function ExpressionDemo() {
                       &nbsp;&nbsp;{input || "<Enter CQL Expression>"}
                     </pre>
                   </code>
-                  In step 3, we will need to extract the from the{" "}
+                  In step 3, we will need to extract the result from the{" "}
                   <code>__lforms__main__</code> executed function.
                 </details>
                 <details>
