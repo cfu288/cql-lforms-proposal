@@ -131,11 +131,13 @@ Since the CQL translation service is written in Java, it is not realistically po
 
 [This repository is accompanied by a live demo here](https://cfu288.github.io/cql-lforms-proposal/).
 
-This demo touches upon the following:
+This technical demo shows an example of each of the following:
 
-1. Execution of inline CQL expressions in the browser, using an external CQL translation service to convert the CQL to ELM just prior to executing the ELM in the browser.
-2. Parsing a FHIR questionnaire that contains an inline CQL expression, handing translation of the inline CQL using a external CQL translation service to retrieve the ELM representation, and executing the returned ELM in the browser.
-3. Parsing a FHIR questionnaire that contains a reference to an external CQL+ELM or only CQL library, and executing the reference to a method from that library in the browser. If the external library only contains CQL, handing translation of the inline CQL using a external CQL translation service to retrieve the ELM representation, and executing the returned ELM in the browser
+1. Demo 1: Execution of inline CQL expressions in the browser, using an external CQL translation service to convert the CQL to ELM just prior to executing the ELM in the browser.
+2. Demo 2: Parsing a FHIR questionnaire that contains an inline CQL expression, handing translation of the inline CQL using a external CQL translation service to retrieve the ELM representation, and executing the returned ELM in the browser.
+3. Demo 3: Parsing a FHIR questionnaire that contains a reference to an external CQL+ELM or only CQL library, and executing the reference to a method from that library in the browser. If the external library only contains CQL, handing translation of the inline CQL using a external CQL translation service to retrieve the ELM representation, and executing the returned ELM in the browser
+
+To see each demo, scroll to the top of this live demo site and click on the relevant tab.
 
 The demo depends on an external api [cql-translation-service](https://github.com/cqframework/cql-translation-service), which I am hosting at [https://cqltranslationservice.foureighteen.dev/cql/translator](https://cqltranslationservice.foureighteen.dev/cql/translator) for the purposes of this demo.
 
