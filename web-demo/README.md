@@ -1,6 +1,27 @@
 # example cql execution in the browser
 
-Demo of running cql expressions in the browser
+Demo of running cql expressions in the browser.
+
+For examples where an elm representation is not provided, an external api service [cql-translation-service](https://github.com/cqframework/cql-translation-service) is required to be running to translate the CQL into executable ELM.
+
+Note: Requires running cql-translation-service at localhost:8080, or using the hosted version at `https://cqltranslationservice.foureighteen.dev/cql/translator`.
+
+```bash
+cd web-demo
+npm run dev
+```
+
+## Dependencies for demo
+
+Requires [cql-translation-service](https://github.com/cqframework/cql-translation-service) to be running to translate CQL into executable ELM. It is included as a submodule in this repo. Changes have been made to the dockerfile to make it compatible with the web client in web-demo.
+
+```bash
+cd cql-translation-service
+git submodule init
+git submodule update
+docker build -t cql-translation-service .
+docker run -t -i -p 8080:8000 cql-translation-service
+```
 
 ```bash
 npm run dev

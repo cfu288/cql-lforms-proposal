@@ -5,23 +5,25 @@ export function NavBar() {
   return (
     <header>
       <nav>
+        <h1>Links:</h1>
         <ul>
           <li>
-            <Link to={AppRoutes.home}>Home</Link>
+            <Link to={AppRoutes.home}>README</Link>
           </li>
           <li>
             <Link to={AppRoutes.expressions}>
-              Inline CQL Expression Example with CQL {"->"} Elm Conversion
+              Demo 1: Inline CQL Expression Example with CQL {"->"} Elm
+              Conversion
             </Link>
           </li>
           <li>
             <Link to={AppRoutes.questionnaireInlineExpressions}>
-              FHIR questionnaire with Inline CQL Example
+              Demo 2: FHIR questionnaire with Inline CQL Example
             </Link>
           </li>
           <li>
             <Link to={AppRoutes.questionnaireLibraries}>
-              FHIR questionnaire with CQL Library Example
+              Demo 3: FHIR questionnaire with CQL Library Example
             </Link>
           </li>
           <li>
