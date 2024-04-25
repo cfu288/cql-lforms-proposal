@@ -121,6 +121,10 @@ Since the CQL translation service is written in Java, it is not realistically po
 - Currently, the reference ELM to CQL translation service does not translate inline CQL expressions to ELM. This makes publishing the ELM representation of the CQL expression alongside the CQL expression impossible. See ([this discussion](https://chat.fhir.org/#narrow/stream/179220-cql/topic/Translating.20inline.20CQL.20to.20ELM)).
   - Currently, [us-ph-alternative-expression-extension](http://hl7.org/fhir/us/ecr/StructureDefinition/us-ph-alternative-expression-extension) is not supported in questionnaires [see discussion](https://chat.fhir.org/#narrow/stream/179255-questionnaire/topic/US.20Public.20Health.20Alternative.20Expressions.20in.20Questionnaires), so even if we could generate an ELM representation of an inline CQL expression, it would not be possible to include it in the questionnaire.
 
+#### Dependency on external CQL translation service
+
+- For any external links to CQL libraries without a corresponding ELM representation, the CQL translation service must be used to convert the CQL to ELM. This requires a server-side service to translate the CQL to ELM. Note that this is undesirable for our lforms implementation.
+
 ### Suggested Implementation Path
 
 - Focus on handling references to external CQL (or CQL+ELM) libraries first, as this is the most feasible path forward. It is clear how to provide support for CQL+ELM in a FHIR Library resource, and allowing the Questionnaire to reference this library is a straightforward extension. This would allow for the execution of CQL expressions in the browser without the need for a server-side translation service.
