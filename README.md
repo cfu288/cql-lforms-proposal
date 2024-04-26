@@ -29,7 +29,7 @@ One workaround to this limitation is to allow users to provide the ELM represent
 
 ## Issues with Inline CQL and ELM Expressions
 
-Currently, the reference ELM to CQL translation service does not translate inline CQL expressions to ELM. This makes publishing the ELM representation of the CQL expression alongside the CQL expression impossible. See ([this discussion](https://chat.fhir.org/#narrow/stream/179220-cql/topic/Translating.20inline.20CQL.20to.20ELM/near/432294574)).
+Currently, the [reference ELM to CQL translation service](https://github.com/cfu288/cql-translation-service) does not translate inline CQL expressions to ELM. This makes publishing the ELM representation of the CQL expression alongside the CQL expression impossible. See ([this discussion](https://chat.fhir.org/#narrow/stream/179220-cql/topic/Translating.20inline.20CQL.20to.20ELM/near/432294574)).
 
 Even if it were possible to generate inline ELM, there currently isn't a way to represent it in FHIR questionnaires. There is an extension [us-ph-alternative-expression-extension](http://hl7.org/fhir/us/ecr/StructureDefinition/us-ph-alternative-expression-extension) that could theoretically allow for us to provide the ELM representation alongside the CQL, but it is not supported in questionnaires [see discussion](https://chat.fhir.org/#narrow/stream/179255-questionnaire/topic/US.20Public.20Health.20Alternative.20Expressions.20in.20Questionnaires).
 
