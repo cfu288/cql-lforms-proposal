@@ -146,5 +146,3 @@ We can then describe the capabilities of our questionnaire as a 'executable' que
 To see each demo, scroll to the top of this live demo site and click on the relevant tab.
 
 The demo depends on an external api [cql-translation-service](https://github.com/cqframework/cql-translation-service), which I am hosting at [https://cqltranslationservice.foureighteen.dev/cql/translator](https://cqltranslationservice.foureighteen.dev/cql/translator) for the purposes of this demo.
-
-[![demo video](https://github.com/cfu288/cql-lforms-proposal/assets/2985976/ac32716f-c673-480e-93da-c0821586c8a9)](https://github.com/cfu288/cql-lforms-proposal/assets/2985976/ac32716f-c673-480e-93da-c0821586c8a9)
