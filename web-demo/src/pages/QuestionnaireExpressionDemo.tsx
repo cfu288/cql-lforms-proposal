@@ -33,58 +33,60 @@ function QuestionnaireExpressionDemo() {
   // and only re-renders when the questionnaire data changes
   const memoedQuestionnareData = useMemo(
     () => (
-      <code>
-        <pre
-          key={Math.random()}
-          style={{
-            textAlign: "left",
-            maxWidth: "100%",
-            maxHeight: "500px",
-            overflowX: "auto",
-            overflowY: "auto",
-            border: "1px solid #ccc",
-            fontSize: "small",
-            backgroundColor: "var(--accent-bg)",
-            animation: "flash 0.75s",
-          }}
-        >
-          {qd}
-        </pre>
-      </code>
+      <pre
+        key={Math.random()}
+        style={{
+          textAlign: "left",
+          maxWidth: "100%",
+          maxHeight: "500px",
+          overflowX: "auto",
+          overflowY: "auto",
+          border: "1px solid #ccc",
+          fontSize: "small",
+          backgroundColor: "var(--accent-bg)",
+          animation: "flash 0.75s",
+        }}
+      >
+        {qd}
+      </pre>
     ),
     [qd]
   );
 
   return (
-    <>
+    <body className="hack container">
       <NavBar />
-      <h1>FHIR Questionnaire *inline* CQL in browser execution demo</h1>
+      <h1>FHIR Questionnaire with execution of *inline* CQL in browser demo</h1>
       <p>
         This demo parses a FHIR Questionnaire with an inline CQL expression and
         executes the referenced CQL expression from the questionnaire in the
         browser.
       </p>
       <p>
-        Note that the reference{" "}
+        Note that this demo depends on the reference{" "}
         <a href="https://github.com/cfu288/cql-translation-service">
           cql-to-elm translation service
         </a>{" "}
-        does not handle the translation to ELM for inline CQL expressions. As a
-        workaround, the CQL expression is converted to a library by wrapping the
-        CQL expression with a function <code>__lforms__main__</code> and
-        executing that function.
+        , which actually cannot handle the translation to ELM for inline CQL
+        expressions as it only works with libraries. As a workaround, we take
+        the user provided inline CQL expression, converted it to a library by
+        wrapping the CQL expression with a function{" "}
+        <code>__lforms__main__</code>, and executing that function.
       </p>
       <p>
-        This does mean that providing an alternate Elm representation of the CQL
-        via a us-ph-alternative-expression-extension is not currently possible.
-        Even if it was possible,{" "}
+        This does mean that providing an alternate EELM representation of the
+        CQL via a us-ph-alternative-expression-extension in the questionnaire is
+        not currently possible. Even if it was possible,{" "}
         <a href="https://hl7.org/fhir/us/ecr/STU2.1/StructureDefinition-us-ph-alternative-expression-extension.html">
           the current Context of Use in the IG
         </a>{" "}
         does not include questionnaires.
       </p>
       <section>
-        <p>Current questionnaire with CQL inline expressions:</p>
+        <h2>Demo questionnaire with CQL inline expressions to be executed:</h2>
+        <p>
+          Click the buttons below the questionnaire to execute the inline CQL
+        </p>
         {memoedQuestionnareData}
         <form
           onSubmit={handleFormSubmit}
@@ -103,21 +105,7 @@ function QuestionnaireExpressionDemo() {
               margin: "auto",
             }}
           >
-            <button
-              type="submit"
-              style={{
-                padding: "10px",
-                fontSize: "1em",
-                backgroundColor: loadingStatus ? "#ccc" : "#4CAF50",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                width: "50%",
-                transition: "background-color 1s ease",
-              }}
-              disabled={loadingStatus}
-            >
+            <button type="submit" style={{}} disabled={loadingStatus}>
               {loadingStatus ? "Loading" : "Parse Questionnaire and Run CQL"}
             </button>
             <button
@@ -126,17 +114,6 @@ function QuestionnaireExpressionDemo() {
                 setCqlExecutionResult(null);
               }}
               type="reset"
-              style={{
-                padding: "10px",
-                fontSize: "1em",
-                backgroundColor: "#f44336",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                width: "50%",
-                marginLeft: "10px",
-              }}
             >
               Reset
             </button>
@@ -145,6 +122,7 @@ function QuestionnaireExpressionDemo() {
       </section>
       {Object.entries(elmData).length > 0 && (
         <section>
+          <h1>Execution Details</h1>
           <details>
             <summary>Library ELM Representation</summary>
             <p>
@@ -177,7 +155,7 @@ function QuestionnaireExpressionDemo() {
       {cqlExecutionResult && (
         <>
           <section>
-            <h2>Form executed CQL output</h2>
+            <h1>Form executed CQL output</h1>
             <p>
               (using{" "}
               <a href="https://github.com/cqframework/cql-execution?tab=readme-ov-file">
@@ -210,7 +188,7 @@ function QuestionnaireExpressionDemo() {
           </section>
         </>
       )}
-    </>
+    </body>
   );
 }
 

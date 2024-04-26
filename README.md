@@ -1,28 +1,28 @@
-# Exploring support for CQL in SDC Questionnaires and potential for executing CQL in the browser
+# Exploring CQL Support in SDC Questionnaires and Potential for Executing CQL in the Browser
 
 [This repository is accompanied by a live demo](https://cfu288.github.io/cql-lforms-proposal/).
 
-This repository explores the feasibility of adding support for CQL in FHIR Questionnaires. The goal is to allow for the execution of CQL expressions in the browser. This would allow for the creation of dynamic forms that can calculate values based on CQL expressions. The ultimate goal is to add CQL support to [LForms](https://github.com/lhncbc/lforms).
+This repository explores the feasibility of adding support for CQL in FHIR Questionnaires. The goal is to allow for the execution of CQL expressions and libraries in the browser. This would allow for the creation of dynamic forms that can calculate values based on CQL expressions. The ultimate goal is to add CQL support to [lforms](https://github.com/lhncbc/lforms).
 
-To achieve this goal, the following is required:
+To achieve this goal, accomplishing some of the following steps are required:
 
 1. Within a FHIR Questionnaire, allow for the inclusion of inline CQL expressions that can be executed in the browser. This requires the ability to either:
 
-   1. Translate the CQL inline expression into ELM
-   2. Have the ELM representation provided alongside of the CQL inline expression using a [us-ph-alternative-expression-extension](http://hl7.org/fhir/us/ecr/StructureDefinition/us-ph-alternative-expression-extension) extension. **Currently not supported in questionnaires**, see [this discussion](https://chat.fhir.org/#narrow/stream/179220-cql/topic/Translating.20inline.20CQL.20to.20ELM).
+   - Translate the CQL inline expression into ELM in the browser
+   - Have the ELM representation provided alongside of the CQL inline expression using a [us-ph-alternative-expression-extension](http://hl7.org/fhir/us/ecr/StructureDefinition/us-ph-alternative-expression-extension) extension. **However, this extension is currently not supported in questionnaires**, see [this discussion](https://chat.fhir.org/#narrow/stream/179220-cql/topic/Translating.20inline.20CQL.20to.20ELM).
 
-1. Within a FHIR Questionnaire, allow for external references to CQL libraries that can be used to execute CQL expressions in the browser. This requires the ability to either
-   1. Fetch the external CQL library and translate it into ELM
-   2. Have the ELM representation provided alongside of the CQL library using a [cqf-library](http://hl7.org/fhir/StructureDefinition/cqf-library) extension.
+2. Within a FHIR Questionnaire, allow for external references to CQL libraries that can be used to execute CQL expressions in the browser. This requires the ability to either:
+   - Fetch the external CQL library and translate it into ELM
+   - Have the ELM representation provided alongside of the CQL library using a [cqf-library](http://hl7.org/fhir/StructureDefinition/cqf-library) extension.
 
-## Barriers to Implementation
+# Barriers to Implementation
 
-### Lack of clarity/examples in IGs of incorporating CQL Libraries and Inline Expressions into FHIR Questionnaires
+## Lack of clarity/examples in IGs of incorporating CQL Libraries and Inline Expressions into FHIR Questionnaires
 
 - The current IGs for including CQL (both expressions and libraries) in questionnaires is not clear, with no easy to find example FHIR questionnaires that show how this might be done ([see discussion](https://chat.fhir.org/#narrow/stream/179255-questionnaire/topic/ELM.20representations.20alongside.20CQL.20libraries.2Fexpressions/near/432725398)). Given our current understanding, I've included two examples below of how this should be done.
 
 <details>
-  <summary>Example FHIR Questionnaire with Inline CQL example</summary>
+  <summary>Click Here to See Example FHIR Questionnaire with Inline CQL example</summary>
 
 ```json
 {
@@ -51,7 +51,7 @@ To achieve this goal, the following is required:
 </details>
 
 <details>
-  <summary>Example FHIR Questionnaire with External CQL+ELM Library Example</summary>
+  <summary>Click Here to See Example FHIR Questionnaire with External CQL+ELM Library Example</summary>
   
   ```json
   {
@@ -111,31 +111,33 @@ Where 'http://example.com/ExampleExternalCQLLibrary' would be a reference to thi
 </details>
 
 </details>
+</br>
 
-### Issues with fully in-browser execution of CQL
+## Issues with fully in-browser execution of CQL
 
-Since the CQL translation service is written in Java, it is not realistically possible to run it in the browser. This requires the use of a server-side service to translate CQL to ELM, or allowing users to provide the ELM representation. However, allowing users to provide the ELM representation has its own issues (particularly inline expressions as discussed below):
+Currently, raw CQL cannot be executed in the browser natively. It must be translated to ELM first. There is a reference CQL to ELM translation service, but these are not feasible to run in the browser. This means in order to translate CQL, lforms would be dependent on a server-side service to translate the CQL to ELM. Currently, this is undesirable for our lforms implementation - the current request is to complete all processing in the browser.
 
-#### Issues with inline CQL and ELM expressions
+Note that there is some precedent to allow for users to provide ELM directly alongside CQL expressions in order to skip this in-browser translation step, however there are limitations to this approach as well, particularly with inline expressions (discussed below).
 
-- Currently, the reference ELM to CQL translation service does not translate inline CQL expressions to ELM. This makes publishing the ELM representation of the CQL expression alongside the CQL expression impossible. See ([this discussion](https://chat.fhir.org/#narrow/stream/179220-cql/topic/Translating.20inline.20CQL.20to.20ELM)).
-  - Currently, [us-ph-alternative-expression-extension](http://hl7.org/fhir/us/ecr/StructureDefinition/us-ph-alternative-expression-extension) is not supported in questionnaires [see discussion](https://chat.fhir.org/#narrow/stream/179255-questionnaire/topic/US.20Public.20Health.20Alternative.20Expressions.20in.20Questionnaires), so even if we could generate an ELM representation of an inline CQL expression, it would not be possible to include it in the questionnaire.
+### Issues with Inline CQL and ELM Expressions
 
-#### Dependency on external CQL translation service
+Currently, the reference ELM to CQL translation service does not translate inline CQL expressions to ELM. This makes publishing the ELM representation of the CQL expression alongside the CQL expression impossible. See ([this discussion](https://chat.fhir.org/#narrow/stream/179220-cql/topic/Translating.20inline.20CQL.20to.20ELM)).
 
-- For any external links to CQL libraries without a corresponding ELM representation, the CQL translation service must be used to convert the CQL to ELM. This requires a server-side service to translate the CQL to ELM. Note that this is undesirable for our lforms implementation.
+Even if it were possible to generate inline ELM, there currently isn't a way to represent it in FHIR questionnaires. There is an extension [us-ph-alternative-expression-extension](http://hl7.org/fhir/us/ecr/StructureDefinition/us-ph-alternative-expression-extension) that could theoretically allow for us to provide the elm representation alongside the CQL, but it is not supported in questionnaires [see discussion](https://chat.fhir.org/#narrow/stream/179255-questionnaire/topic/US.20Public.20Health.20Alternative.20Expressions.20in.20Questionnaires). So even if we could generate an ELM representation of an inline CQL expression, it would not be possible to include it in the questionnaire.
 
-### Suggested Implementation Path
+This limitation does not apply to references to external CQL libraries, as the ELM representation can be provided alongside the CQL library using a [cqf-library](http://hl7.org/fhir/StructureDefinition/cqf-library) extension.
 
-- Focus on handling references to external CQL (or CQL+ELM) libraries first, as this is the most feasible path forward. It is clear how to provide support for CQL+ELM in a FHIR Library resource, and allowing the Questionnaire to reference this library is a straightforward extension. This would allow for the execution of CQL expressions in the browser without the need for a server-side translation service.
+## Suggested Implementation Path
 
-- We can use profiles to explain what level of support we are providing in lforms for CQL ([see discussion](https://chat.fhir.org/#narrow/stream/179220-cql/topic/Translating.20inline.20CQL.20to.20ELM/near/434413498)).
+Given the above barriers, the following implementation path is suggested:
+
+Focus on handling references to external CQL (or CQL+ELM) libraries first, as this is the most feasible path forward. Users can generate CQL and ELM libraries offline, and publish it online to be referenced by their questionanaire. This would allow for the execution of CQL expressions in the browser without the need for a server-side translation service.
+
+We can then describe the capabilities of our questionnaire as a 'executable' questionnaire by using profiles to explain the level of CQL support we are providing in lforms ([see discussion](https://chat.fhir.org/#narrow/stream/179220-cql/topic/Translating.20inline.20CQL.20to.20ELM/near/434413498)).
 
 # About this demo
 
-[This repository is accompanied by a live demo here](https://cfu288.github.io/cql-lforms-proposal/).
-
-This technical demo shows an example of each of the following:
+[This repository is accompanied by a live demo here](https://cfu288.github.io/cql-lforms-proposal/). This technical demo shows an example of each of the following:
 
 1. Demo 1: Execution of inline CQL expressions in the browser, using an external CQL translation service to convert the CQL to ELM just prior to executing the ELM in the browser.
 2. Demo 2: Parsing a FHIR questionnaire that contains an inline CQL expression, handing translation of the inline CQL using a external CQL translation service to retrieve the ELM representation, and executing the returned ELM in the browser.

@@ -6,9 +6,9 @@ import rehypeRaw from "rehype-raw";
 
 export function Home() {
   return (
-    <>
+    <body className="hack container">
       <NavBar />
       <ReactMarkdown children={markdown} rehypePlugins={[rehypeRaw]} />
-    </>
+    </body>
   );
 }

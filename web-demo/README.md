@@ -23,10 +23,6 @@ docker build -t cql-translation-service .
 docker run -t -i -p 8080:8000 cql-translation-service
 ```
 
-```bash
-npm run dev
-```
-
 ## Dependencies
 
 Requires [cql-translation-service](https://github.com/cqframework/cql-translation-service) to be running to translate CQL into executable ELM.

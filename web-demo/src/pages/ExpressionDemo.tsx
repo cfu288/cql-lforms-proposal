@@ -55,7 +55,7 @@ function ExpressionDemo() {
   }, [elm]);
 
   return (
-    <>
+    <body className="hack container">
       <NavBar />
       <h1>Inline CQL in the browser demo</h1>
       <p>
@@ -103,21 +103,7 @@ function ExpressionDemo() {
               margin: "auto",
             }}
           >
-            <button
-              type="submit"
-              style={{
-                padding: "10px",
-                fontSize: "1em",
-                backgroundColor: isLoading ? "#ccc" : "#4CAF50",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                width: "50%",
-                transition: "background-color 1s ease",
-              }}
-              disabled={isLoading}
-            >
+            <button type="submit" style={{}} disabled={isLoading}>
               {isLoading ? "Loading" : "Run"}
             </button>
             <button
@@ -127,32 +113,15 @@ function ExpressionDemo() {
                 setCqlResult(null);
               }}
               type="reset"
-              style={{
-                padding: "10px",
-                fontSize: "1em",
-                backgroundColor: "#f44336",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                width: "50%",
-                marginLeft: "10px",
-              }}
+              style={{}}
             >
               Reset
             </button>
           </div>
         </form>
-        {/* <p>
-        TODO: If elm is provided directly as a us-ph-alternative-expression, use
-        the pre-converted elm instead of converting the CQL to ELM. Currently
-        not possible since the reference conversion service does not understand
-        inline CQL expressions.
-      </p> */}
-
         {cqlResult && (
           <section>
-            <h2>Execution details</h2>
+            <h1>Execution details</h1>
             {Object.entries(elm).length > 0 && (
               <>
                 <p>
@@ -165,17 +134,13 @@ function ExpressionDemo() {
                 </p>
                 <details>
                   <summary>1) Wrapping CQL expression</summary>
-                  <p>
-                    Prior to translation of CQL to elm, the user-entered CQL
-                    expression is wrapped in a function definition:
-                  </p>
-                  <code>
-                    <pre>
-                      define __lforms__main__:
-                      <br />
-                      &nbsp;&nbsp;{input || "<Enter CQL Expression>"}
-                    </pre>
-                  </code>
+                  Prior to translation of CQL to elm, the user-entered CQL
+                  expression is wrapped in a function definition:
+                  <pre>
+                    define __lforms__main__:
+                    <br />
+                    &nbsp;&nbsp;{input || "<Enter CQL Expression>"}
+                  </pre>
                   In step 3, we will need to extract the result from the{" "}
                   <code>__lforms__main__</code> executed function.
                 </details>
@@ -240,7 +205,7 @@ executor
           </section>
         )}
 
-        <p>Result:</p>
+        <h1>Result:</h1>
         <table style={{ width: "100%", border: "1px solid #ccc" }}>
           <thead>
             <tr>
@@ -266,7 +231,7 @@ executor
           </tbody>
         </table>
       </div>
-    </>
+    </body>
   );
 }
 

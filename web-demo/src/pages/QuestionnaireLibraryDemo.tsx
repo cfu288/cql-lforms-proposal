@@ -33,32 +33,32 @@ function QuestionnaireLibraryDemo() {
   // and only re-renders when the questionnaire data changes
   const memoedQuestionnareData = useMemo(
     () => (
-      <code>
-        <pre
-          key={Math.random()}
-          style={{
-            textAlign: "left",
-            maxWidth: "100%",
-            maxHeight: "500px",
-            overflowX: "auto",
-            overflowY: "auto",
-            border: "1px solid #ccc",
-            fontSize: "small",
-            backgroundColor: "var(--accent-bg)",
-            animation: "flash 0.75s",
-          }}
-        >
-          {qd}
-        </pre>
-      </code>
+      <pre
+        key={Math.random()}
+        style={{
+          textAlign: "left",
+          maxWidth: "100%",
+          maxHeight: "500px",
+          overflowX: "auto",
+          overflowY: "auto",
+          border: "1px solid #ccc",
+          fontSize: "small",
+          backgroundColor: "var(--accent-bg)",
+          animation: "flash 0.75s",
+        }}
+      >
+        {qd}
+      </pre>
     ),
     [qd]
   );
 
   return (
-    <>
+    <body className="hack container">
       <NavBar />
-      <h1>FHIR Questionnaire CQL *library* in browser execution demo</h1>
+      <h1>
+        FHIR Questionnaire with execution of a CQL *library* in browser demo
+      </h1>
       <p>
         This demo parses a FHIR Questionnaire with a CQL library reference and
         executes the referenced CQL methods in the questionnaire from the
@@ -71,7 +71,61 @@ function QuestionnaireLibraryDemo() {
         directly used for execution.
       </p>
       <section>
-        <p>Current questionnaire with CQL Library Reference:</p>
+        <h2>Demo questionnaire with CQL Library Reference to be executed:</h2>
+        <p>
+          Click the buttons below the questionnaire to execute the inline CQL
+        </p>
+        <p>
+          <mark>Note:</mark> The questionnaire below references a CQL library
+          that contains{" "}
+          {(questionnaireData.extension as any[])[0].valueCanonical.includes(
+            "cql+elm-library.json"
+          )
+            ? "both CQL and ELM"
+            : "only CQL. This means a translation service will be used to convert the CQL to ELM before execution"}
+          . Click the button below to toggle the reference to a{" "}
+          {(questionnaireData.extension as any[])[0].valueCanonical.includes(
+            "cql+elm-library.json"
+          )
+            ? "CQL only library"
+            : "CQL+ELM library"}
+          .
+        </p>
+        <p>
+          Current library reference:{" "}
+          <a href={(questionnaireData.extension as any[])[0].valueCanonical}>
+            {(questionnaireData.extension as any[])[0].valueCanonical}
+          </a>
+        </p>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            const newQuestionnaireData = JSON.parse(
+              JSON.stringify(questionnaireData)
+            );
+            // toggle between cql-library.json and cql+elm-library.json dynamically by checking the current value
+            const url = new URL(
+              newQuestionnaireData.extension[0].valueCanonical
+            );
+            const path = url.pathname;
+            const base = url.origin;
+            newQuestionnaireData.extension[0].valueCanonical =
+              path === "/cql-lforms-proposal/cql+elm-library.json"
+                ? base + "/cql-lforms-proposal/cql-library.json"
+                : base + "/cql-lforms-proposal/cql+elm-library.json";
+
+            setElmData({});
+            setCqlExecutionResult(null);
+            setQuestionnaireData(newQuestionnaireData);
+          }}
+        >
+          {(questionnaireData.extension as any[])[0].valueCanonical.includes(
+            "cql+elm-library.json"
+          )
+            ? "Switch to a CQL only library"
+            : "Switch to a CQL+ELM library"}
+        </button>
         {memoedQuestionnareData}
         <form
           onSubmit={handleFormSubmit}
@@ -90,21 +144,7 @@ function QuestionnaireLibraryDemo() {
               margin: "auto",
             }}
           >
-            <button
-              type="submit"
-              style={{
-                padding: "10px",
-                fontSize: "1em",
-                backgroundColor: loadingStatus ? "#ccc" : "#4CAF50",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                width: "50%",
-                transition: "background-color 1s ease",
-              }}
-              disabled={loadingStatus}
-            >
+            <button type="submit" disabled={loadingStatus}>
               {loadingStatus ? "Loading" : "Parse Questionnaire and Run CQL"}
             </button>
             <button
@@ -113,72 +153,15 @@ function QuestionnaireLibraryDemo() {
                 setCqlExecutionResult(null);
               }}
               type="reset"
-              style={{
-                padding: "10px",
-                fontSize: "1em",
-                backgroundColor: "#f44336",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                width: "50%",
-                marginLeft: "10px",
-              }}
             >
               Reset
             </button>
           </div>
-          <p>
-            Current referenced CQL library in the questionaire below contains{" "}
-            {(questionnaireData.extension as any[])[0].valueCanonical.includes(
-              "cql+elm-library.json"
-            )
-              ? "both CQL and ELM"
-              : "only CQL. This means a translation service will be used to convert the CQL to ELM before execution"}
-            . Click the blue button below to toggle to a{" "}
-            {(questionnaireData.extension as any[])[0].valueCanonical.includes(
-              "cql+elm-library.json"
-            )
-              ? "CQL only library"
-              : "CQL+ELM library"}{" "}
-            . Current library reference:{" "}
-            <a href={(questionnaireData.extension as any[])[0].valueCanonical}>
-              {(questionnaireData.extension as any[])[0].valueCanonical}
-            </a>
-          </p>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              const newQuestionnaireData = JSON.parse(
-                JSON.stringify(questionnaireData)
-              );
-              // toggle between cql-library.json and cql+elm-library.json dynamically by checking the current value
-              const url = new URL(
-                newQuestionnaireData.extension[0].valueCanonical
-              );
-              const path = url.pathname;
-              const base = url.origin;
-              newQuestionnaireData.extension[0].valueCanonical =
-                path === "/cql-lforms-proposal/cql+elm-library.json"
-                  ? base + "/cql-lforms-proposal/cql-library.json"
-                  : base + "/cql-lforms-proposal/cql+elm-library.json";
-
-              setElmData({});
-              setCqlExecutionResult(null);
-              setQuestionnaireData(newQuestionnaireData);
-            }}
-          >
-            {(questionnaireData.extension as any[])[0].valueCanonical.includes(
-              "cql+elm-library.json"
-            )
-              ? "Switch to a CQL only library"
-              : "Switch to a CQL+ELM library"}
-          </button>
         </form>
       </section>
       {Object.entries(elmData).length > 0 && (
         <section>
+          <h1>Execution Details</h1>
           <details>
             <summary>Library ELM Representation</summary>
             <p>
@@ -187,7 +170,8 @@ function QuestionnaireLibraryDemo() {
               <a href="https://github.com/cqframework/cql-translation-service">
                 cql-to-elm translation service
               </a>{" "}
-              to handle the translation to ELM )
+              to handle the translation to ELM. Otherwise, the ELM
+              representation provided by the external library is used)
             </p>
             <pre
               style={{
@@ -211,7 +195,7 @@ function QuestionnaireLibraryDemo() {
       {cqlExecutionResult && (
         <>
           <section>
-            <h2>Form executed CQL output</h2>
+            <h1>Form executed CQL output</h1>
             <p>
               (using{" "}
               <a href="https://github.com/cqframework/cql-execution?tab=readme-ov-file">
@@ -244,7 +228,7 @@ function QuestionnaireLibraryDemo() {
           </section>
         </>
       )}
-    </>
+    </body>
   );
 }
 
