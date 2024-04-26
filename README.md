@@ -115,7 +115,7 @@ Where 'http://example.com/ExampleExternalCQLLibrary' would be a reference to thi
 
 ## Issues with fully in-browser execution of CQL
 
-Currently, raw CQL cannot be executed in the browser natively. It must be translated to ELM first. There is a reference CQL to ELM translation service, but these are not feasible to run in the browser. This means in order to translate CQL, lforms would be dependent on a server-side service to translate the CQL to ELM. Currently, this is undesirable for our lforms implementation - the current request is to complete all processing in the browser.
+Currently, raw CQL cannot be executed in the browser natively. CQL has an intermediary format it must be converted to called ELM, which can then be executed in the browser environment [using a js library](https://github.com/cqframework/cql-execution). There is a [reference CQL to ELM translation service](https://github.com/cfu288/cql-translation-service) available, however it is currently not feasible to run it in the browser. This means in order to run CQL, lforms would be dependent on a server-side CQL to ELM translation service. Currently, this is undesirable for our lforms implementation - the current request is to complete all processing in the browser.
 
 Note that there is some precedent to allow for users to provide ELM directly alongside CQL expressions in order to skip this in-browser translation step, however there are limitations to this approach as well, particularly with inline expressions (discussed below).
 
