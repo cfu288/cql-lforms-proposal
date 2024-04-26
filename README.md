@@ -131,7 +131,7 @@ Where 'http://example.com/ExampleExternalCQLLibrary' would be a reference to thi
 </details>
 </br>
 
-## Suggested Implementation Path
+# Suggested Implementation Path
 
 Given the above barriers, the following implementation path is suggested: focus on handling references to external CQL (or CQL+ELM) libraries first in questionnaires while postponing support of inline CQL. The pathway to implementing computable questionnaires with external CQL or CQL+ELM library references seems more straightforward than their inline counterparts.
 
