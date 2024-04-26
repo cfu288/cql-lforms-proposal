@@ -72,34 +72,34 @@ The current IGs for including CQL (both expressions and libraries) in questionna
  <summary>Click Here to See Example FHIR Questionnaire with External CQL+ELM Library Example</summary>
  
  ```json
- {
- "resourceType": "Questionnaire",
- "id": "Example-CQL-Calculation-Questionnaire",
- "title": "Example CQL Calculation Questionnaire",
- "extension": [
- {
- "url": "http://hl7.org/fhir/StructureDefinition/cqf-library",
- "valueCanonical": "http://example.com/ExampleExternalCQLLibrary"
- }
- ],
- "item": [
- {
- "text": "Multiply 2 * 3 in text/cql using external library",
- "type": "string",
- "required": false,
- "extension": [
- {
- "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression",
- "valueExpression": {
- "description": "Multiply two numbers via cql expression found in an external library.",
- "language": "text/cql",
- "reference": "\"ExampleExternalCQLLibrary\".externalMultiplyFn"
- }
- }
- ]
- }
- ]
- }
+{
+  "resourceType": "Questionnaire",
+  "id": "Example-CQL-Calculation-Questionnaire",
+  "title": "Example CQL Calculation Questionnaire",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/cqf-library",
+      "valueCanonical": "http://example.com/ExampleExternalCQLLibrary"
+    }
+  ],
+  "item": [
+    {
+      "text": "Multiply 2 * 3 in text/cql using external library",
+      "type": "string",
+      "required": false,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression",
+          "valueExpression": {
+            "description": "Multiply two numbers via cql expression found in an external library.",
+            "language": "text/cql",
+            "reference": "\"ExampleExternalCQLLibrary\".externalMultiplyFn"
+          }
+        }
+      ]
+    }
+  ]
+}
  ```
 
 Where 'http://example.com/ExampleExternalCQLLibrary' would be a reference to this library resource, which itself contains the actual CQL content:
