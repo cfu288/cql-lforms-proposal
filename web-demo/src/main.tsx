@@ -9,6 +9,7 @@ import QuestionnaireLibraryDemo from "./pages/QuestionnaireLibraryDemo.tsx";
 import { Home } from "./pages/Home.tsx";
 import { AppRoutes } from "./components/Routes";
 import QuestionnaireExpressionDemo from "./pages/QuestionnaireExpressionDemo.tsx";
+import TranslatorUtility from "./pages/TranslatorUtility.tsx";
 // const basename = import.meta.env.DEV ? "/" : "/cql-lforms-proposal/";
 
 const router = createBrowserRouter(
@@ -28,6 +29,10 @@ const router = createBrowserRouter(
     {
       path: AppRoutes.questionnaireLibraries,
       element: <QuestionnaireLibraryDemo />,
+    },
+    {
+      path: AppRoutes.translatorUtility,
+      element: <TranslatorUtility />,
     },
   ],
   {

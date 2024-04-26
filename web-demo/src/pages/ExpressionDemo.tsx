@@ -80,14 +80,14 @@ function ExpressionDemo() {
           }}
         >
           <fieldset className="form-group">
-            <label htmlFor="cql">CQL expression:</label>
+            <label htmlFor="cql">CQL expression</label>
             <input
               id="cql"
               type="text"
               className="form-control"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Enter CQL expression"
+              placeholder="Enter CQL expression here. e.g. '2 * 3' or 'Now()'"
               style={{ width: "100%" }}
             />
           </fieldset>

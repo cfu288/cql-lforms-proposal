@@ -27,6 +27,11 @@ export function NavBar() {
             </Link>
           </li>
           <li>
+            <Link to={AppRoutes.translatorUtility}>
+              Util: Translator Utility
+            </Link>
+          </li>
+          <li>
             <a href="https://github.com/cfu288/cql-lforms-proposal">GitHub</a>
           </li>
         </ul>
