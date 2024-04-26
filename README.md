@@ -131,7 +131,7 @@ This limitation does not apply to references to external CQL libraries, as the E
 
 Given the above barriers, the following implementation path is suggested:
 
-Focus on handling references to external CQL (or CQL+ELM) libraries first, as this is the most feasible path forward. Users can generate CQL and ELM libraries offline, and publish it online to be referenced by their questionanaire. This would allow for the execution of CQL expressions in the browser without the need for a server-side translation service.
+Focus on handling references to external CQL (or CQL+ELM) libraries first in questionnaires. Users can generate CQL and ELM libraries offline, and publish these libraries online to be referenced by their questionnaire. This would allow for the execution of CQL expressions in the browser without the need for a server-side translation service.
 
 We can then describe the capabilities of our questionnaire as a 'executable' questionnaire by using profiles to explain the level of CQL support we are providing in lforms ([see discussion](https://chat.fhir.org/#narrow/stream/179220-cql/topic/Translating.20inline.20CQL.20to.20ELM/near/434413498)).
 
