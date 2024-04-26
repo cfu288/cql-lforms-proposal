@@ -28,7 +28,7 @@ export function NavBar() {
           </li>
           <li>
             <Link to={AppRoutes.translatorUtility}>
-              Util: Translator Utility
+              Util: CQL to ELM Translator Utility
             </Link>
           </li>
           <li>

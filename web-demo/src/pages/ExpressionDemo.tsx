@@ -24,7 +24,6 @@ function ExpressionDemo() {
               Accept: "application/elm+json",
             },
             body: wrapExpressionInFunction(input),
-            // body: input,
           }
         );
         const data = await response.json();
@@ -70,8 +69,8 @@ function ExpressionDemo() {
         </a>{" "}
         library in the browser.
       </p>
-
       <div>
+        <h2>Enter CQL Inline Expression to Translate Below</h2>
         <form
           onSubmit={handleSubmit}
           className="form container"
@@ -79,15 +78,21 @@ function ExpressionDemo() {
             width: "100%",
           }}
         >
-          <fieldset className="form-group">
-            <label htmlFor="cql">CQL expression</label>
+          <fieldset
+            className="form-group"
+            style={{
+              width: "100%",
+              display: "flex",
+            }}
+          >
+            <label htmlFor="cql">CQL expression{"   "}</label>
             <input
               id="cql"
               type="text"
               className="form-control"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Enter CQL expression here. e.g. '2 * 3' or 'Now()'"
+              placeholder=" Enter CQL expression here. e.g. '2 * 3' or 'Now()'"
               style={{ width: "100%" }}
             />
           </fieldset>
@@ -205,7 +210,6 @@ executor
             </details>
           </section>
         )}
-
         <h1>Result:</h1>
         <table style={{ width: "100%", border: "1px solid #ccc" }}>
           <thead>

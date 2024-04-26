@@ -58,24 +58,32 @@ function TranslatorUtility() {
         .
       </p>
       <div>
+        <h2>Enter CQL Code to Translate Below</h2>
         <form
           onSubmit={handleSubmit}
           className="form container"
           style={{
             width: "100%",
+            marginTop: "24px",
           }}
         >
-          <fieldset className="form-group">
-            <label htmlFor="cql">CQL code:</label>
-            <input
+          <fieldset
+            className="form-group form-textarea"
+            style={{
+              width: "100%",
+              display: "flex",
+            }}
+          >
+            <label htmlFor="cql">CQL CODE:</label>
+            <textarea
               id="cql"
-              type="text"
+              rows={10}
               className="form-control"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Enter CQL code"
+              placeholder="ENTER CQL CODE TO TRANSLATE HERE..."
               style={{ width: "100%" }}
-            />
+            ></textarea>
           </fieldset>
           <div
             style={{
@@ -91,7 +99,7 @@ function TranslatorUtility() {
               className="btn btn-primary"
               disabled={isLoading}
             >
-              {isLoading ? <span className="loading"></span> : ""} Run
+              {isLoading ? <span className="loading"></span> : ""} Translate
             </button>
             <button
               className="btn btn-primary btn-ghost"
