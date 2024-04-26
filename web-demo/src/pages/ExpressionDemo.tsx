@@ -74,26 +74,23 @@ function ExpressionDemo() {
       <div>
         <form
           onSubmit={handleSubmit}
+          className="form container"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
+            width: "100%",
           }}
         >
-          <label
-            htmlFor="cql"
-            style={{ fontSize: "1.2em", fontWeight: "bold" }}
-          >
-            Enter CQL expression (e.g., <code>Now()</code> or <code>2*3</code>{" "}
-            ):
-          </label>
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Enter CQL expression"
-            style={{ padding: "10px", fontSize: "1em" }}
-          />
+          <fieldset className="form-group">
+            <label htmlFor="cql">CQL expression:</label>
+            <input
+              id="cql"
+              type="text"
+              className="form-control"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Enter CQL expression"
+              style={{ width: "100%" }}
+            />
+          </fieldset>
           <div
             style={{
               display: "flex",
@@ -103,17 +100,21 @@ function ExpressionDemo() {
               margin: "auto",
             }}
           >
-            <button type="submit" style={{}} disabled={isLoading}>
-              {isLoading ? "Loading" : "Run"}
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={isLoading}
+            >
+              {isLoading ? <span className="loading"></span> : ""} Run
             </button>
             <button
+              className="btn btn-primary btn-ghost"
               onClick={() => {
                 setInput("");
                 setElm({});
                 setCqlResult(null);
               }}
               type="reset"
-              style={{}}
             >
               Reset
             </button>

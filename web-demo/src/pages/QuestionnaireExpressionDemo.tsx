@@ -105,10 +105,16 @@ function QuestionnaireExpressionDemo() {
               margin: "auto",
             }}
           >
-            <button type="submit" style={{}} disabled={loadingStatus}>
-              {loadingStatus ? "Loading" : "Parse Questionnaire and Run CQL"}
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={loadingStatus}
+            >
+              {loadingStatus ? <span className="loading"></span> : ""} Parse
+              Questionnaire and Run CQL
             </button>
             <button
+              className="btn btn-primary btn-ghost"
               onClick={() => {
                 setElmData({});
                 setCqlExecutionResult(null);

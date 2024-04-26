@@ -99,6 +99,7 @@ function QuestionnaireLibraryDemo() {
         </p>
         <button
           type="button"
+          className="btn btn-primary"
           onClick={(e) => {
             e.preventDefault();
             const newQuestionnaireData = JSON.parse(
@@ -144,10 +145,15 @@ function QuestionnaireLibraryDemo() {
               margin: "auto",
             }}
           >
-            <button type="submit" disabled={loadingStatus}>
+            <button
+              type="submit"
+              disabled={loadingStatus}
+              className="btn btn-primary"
+            >
               {loadingStatus ? "Loading" : "Parse Questionnaire and Run CQL"}
             </button>
             <button
+              className="btn btn-primary btn-ghost"
               onClick={() => {
                 setElmData({});
                 setCqlExecutionResult(null);
