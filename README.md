@@ -2,18 +2,20 @@
 
 [This repository is accompanied by a live demo](https://cfu288.github.io/cql-lforms-proposal/).
 
-# Purpose
+# Introduction
 
-This repository explores the feasibility of adding support for CQL in FHIR Questionnaires to [lforms](https://github.com/lhncbc/lforms), enabling execution of user provided CQL expressions and libraries within questionnaires in the browser. Enabling this would allow for the creation of dynamic forms that can calculate values of items in a form based on user provided CQL expressions and libraries.
+This repository explores the feasibility of adding support for CQL in FHIR Questionnaires (and eventually to [lforms](https://github.com/lhncbc/lforms)), enabling execution of user provided CQL expressions and libraries within questionnaires in the browser. Enabling this would allow for the creation of dynamic forms that can calculate values of items in a form based on user provided CQL expressions and libraries.
+
+This repository and demo is intended for developers and implementers who are interested in understanding the technical limitations and potential pathways to implementing CQL support in FHIR Questionnaires within lforms.
 
 # Requirements
 
-To fully achieve this purpose, accomplishing the following steps are required:
+To fully achieve this goal, the following functionality would be required:
 
-1. Within a FHIR Questionnaire, allow for the inclusion of inline CQL expressions that can be executed in the browser.
-2. Within a FHIR Questionnaire, allow for external references to CQL libraries that can be used to execute CQL expressions in the browser.
+1. Within a FHIR Questionnaire, allow for the inclusion of user provided inline CQL expressions that can be executed in the browser.
+2. Within a FHIR Questionnaire, allow for user provided external references to CQL libraries that can be used to execute CQL libraries in the browser.
 
-Note: an additional limitation for integration with lforms is to ideally reduce dependencies on external API services for any steps in this process.
+An additional technical requirement for integration with lforms is to limit dependencies on external API services for any steps in this process, therefore limiting compute of CQL to the browser.
 
 # Technical Limitations/Barriers to Implementation
 
@@ -33,7 +35,7 @@ Even if it were possible to generate inline ELM, there currently isn't a way to 
 
 This limitation does not apply to references to external CQL libraries, as the ELM representation can be provided alongside the CQL library using a [cqf-library](http://hl7.org/fhir/StructureDefinition/cqf-library) extension.
 
-## Lack of clarity/examples in IGs of incorporating CQL Libraries and Inline Expressions into FHIR Questionnaires
+## Lack of Clarity/Examples in IGs Incorporating CQL Libraries and Inline Expressions into FHIR Questionnaires
 
 The current IGs for including CQL (both expressions and libraries) in questionnaires is not clear, with no easy to find example FHIR questionnaires revealing how either should be done ([see discussion](https://chat.fhir.org/#narrow/stream/179255-questionnaire/topic/ELM.20representations.20alongside.20CQL.20libraries.2Fexpressions/near/432725398)). Given our current understanding, I've included two examples below of how I believe these questionnaires should be formatted:
 
@@ -131,7 +133,7 @@ Where 'http://example.com/ExampleExternalCQLLibrary' would be a reference to thi
 
 ## Suggested Implementation Path
 
-Given the above barriers, the following implementation path is suggested: Focus on handling references to external CQL (or CQL+ELM) libraries first in questionnaires while postponing support of inline CQL. The pathway to implementing computable questionnaires with external CQL or CQL+ELM library references seems more straightforward than their inline counterparts.
+Given the above barriers, the following implementation path is suggested: focus on handling references to external CQL (or CQL+ELM) libraries first in questionnaires while postponing support of inline CQL. The pathway to implementing computable questionnaires with external CQL or CQL+ELM library references seems more straightforward than their inline counterparts.
 
 Users can generate CQL + ELM libraries offline, and publish these libraries online to be referenced by their questionnaire. There would be no dependency on a server-side translation service. Limited support would also bypass the issue of not being able to generate ELM representations of inline CQL expressions.
 
