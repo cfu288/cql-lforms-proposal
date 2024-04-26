@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 
 import { NavBar } from "../components/NavBar";
-import { BadRequestError } from "../components/BadRequestErrorRequestError";
+import { BadRequestError } from "../components/BadRequestError";
 
 function TranslatorUtility() {
   const [input, setInput] = useState("");
@@ -47,7 +47,7 @@ function TranslatorUtility() {
       } catch (error) {
         console.error(error);
         if (error instanceof BadRequestError) {
-          setError(error.message);
+          setError((error as BadRequestError).message);
         } else {
           setError(`There was an error when converting your CQL`);
         }
