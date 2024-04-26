@@ -194,6 +194,9 @@ function QuestionnaireExpressionDemo() {
           </section>
         </>
       )}
+      <a href="https://github.com/cfu288/cql-lforms-proposal/blob/b42c33f3c54afda2c83b09bd2ff1c4fe9d97a3a1/web-demo/src/cql-handling/parseQuestionnaireAndRunCQL.tsx#L305">
+        View the source code for this demo
+      </a>
     </body>
   );
 }
