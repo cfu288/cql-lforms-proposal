@@ -1,13 +1,10 @@
-import { Executor, Library, PatientSource, Results } from "cql-execution";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { NavBar } from "../components/NavBar";
-import { wrapExpressionInFunction } from "../utils/wrapExpressionInFunction";
 
 function TranslatorUtility() {
   const [input, setInput] = useState("");
   const [elm, setElm] = useState<Record<string, unknown>>({});
-  const [cqlResult, setCqlResult] = useState<Results | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -106,7 +103,6 @@ function TranslatorUtility() {
               onClick={() => {
                 setInput("");
                 setElm({});
-                setCqlResult(null);
                 setError("");
               }}
               type="reset"
