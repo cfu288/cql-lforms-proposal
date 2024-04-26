@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 
 import { NavBar } from "../components/NavBar";
+import { BadRequestError } from "../components/BadRequestErrorRequestError";
 
 function TranslatorUtility() {
   const [input, setInput] = useState("");
@@ -24,16 +25,34 @@ function TranslatorUtility() {
             body: input,
           }
         );
+        if (!response.ok) {
+          if (response.status === 400) {
+            /**
+             * {"library":{"annotation":[{"translatorVersion":"3.7.1","translatorOptions":"","signatureLevel":"None","type":"CqlToElmInfo"},{"librarySystem":"/tmp/rep18409197112867463641tmp","libraryId":"rep18409197112867463641tmp","startLine":1,"startChar":0,"endLine":1,"endChar":0,"message":"Syntax error at 2","errorType":"syntax","errorSeverity":"error","type":"CqlToElmError"}],"identifier":{},"schemaIdentifier":{"id":"urn:hl7-org:elm","version":"r1"},"usings":{"def":[{"localIdentifier":"System","uri":"urn:hl7-org:elm-types:r1","annotation":[]}]}}}
+             */
+            const errorData = await response.json();
+            throw new BadRequestError(
+              errorData.library.annotation.find(
+                (annotation: { type: string }) =>
+                  annotation.type === "CqlToElmError"
+              ).message
+            );
+          } else {
+            throw new Error("An unexpected error occurred");
+          }
+        }
         const data = await response.json();
         setElm(data);
+        setError("");
       } catch (error) {
         console.error(error);
-        setError(
-          `There was an error when converting your CQL: ${JSON.stringify(error)}`
-        );
+        if (error instanceof BadRequestError) {
+          setError(error.message);
+        } else {
+          setError(`There was an error when converting your CQL`);
+        }
       }
       setIsLoading(false);
-      setError("");
     },
     [input, setElm, setIsLoading]
   );

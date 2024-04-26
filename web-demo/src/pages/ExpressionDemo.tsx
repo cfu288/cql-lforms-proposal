@@ -3,12 +3,14 @@ import { useCallback, useEffect, useState } from "react";
 
 import { NavBar } from "../components/NavBar";
 import { wrapExpressionInFunction } from "../utils/wrapExpressionInFunction";
+import { BadRequestError } from "../components/BadRequestError";
 
 function ExpressionDemo() {
   const [input, setInput] = useState("");
   const [elm, setElm] = useState<Record<string, unknown>>({});
   const [cqlResult, setCqlResult] = useState<Results | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -26,10 +28,32 @@ function ExpressionDemo() {
             body: wrapExpressionInFunction(input),
           }
         );
+        if (!response.ok) {
+          if (response.status === 400) {
+            /**
+             * {"library":{"annotation":[{"translatorVersion":"3.7.1","translatorOptions":"","signatureLevel":"None","type":"CqlToElmInfo"},{"librarySystem":"/tmp/rep18409197112867463641tmp","libraryId":"rep18409197112867463641tmp","startLine":1,"startChar":0,"endLine":1,"endChar":0,"message":"Syntax error at 2","errorType":"syntax","errorSeverity":"error","type":"CqlToElmError"}],"identifier":{},"schemaIdentifier":{"id":"urn:hl7-org:elm","version":"r1"},"usings":{"def":[{"localIdentifier":"System","uri":"urn:hl7-org:elm-types:r1","annotation":[]}]}}}
+             */
+            const errorData = await response.json();
+            throw new BadRequestError(
+              errorData.library.annotation.find(
+                (annotation: { type: string }) =>
+                  annotation.type === "CqlToElmError"
+              ).message
+            );
+          } else {
+            throw new Error("An unexpected error occurred");
+          }
+        }
         const data = await response.json();
         setElm(data);
+        setError("");
       } catch (error) {
         console.error(error);
+        if (error instanceof BadRequestError) {
+          setError(error.message);
+        } else {
+          setError(`There was an error when converting your CQL`);
+        }
       }
       setIsLoading(false);
     },
@@ -56,6 +80,7 @@ function ExpressionDemo() {
   return (
     <body className="hack container">
       <NavBar />
+      {error && <div className="alert alert-error">{error}</div>}
       <h1>Inline CQL in the browser demo</h1>
       <p>
         This demo takes a user-entered CQL expression, converts it to ELM using
@@ -118,6 +143,7 @@ function ExpressionDemo() {
                 setInput("");
                 setElm({});
                 setCqlResult(null);
+                setError("");
               }}
               type="reset"
             >
